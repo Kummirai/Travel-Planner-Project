@@ -185,3 +185,9 @@ header nav a:hover {
   width: fit-content;
   align-self: center;
 }
+
+.btn-destinations:hover{
+  background: var(--primary-hover);
+  color: var(--gray-color);
+  cursor: pointer;
+}
