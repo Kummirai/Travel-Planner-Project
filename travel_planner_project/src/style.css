@@ -346,3 +346,33 @@ header nav a:hover {
   height: 100%;
   object-fit: cover;
 }
+
+.date {
+  font-size: 0.95rem;
+  color: var(--text-color);
+  margin: 0.5rem 0;
+}
+
+.travel-card {
+  box-shadow: 0 0px 4px rgba(153, 153, 153, 0.8);
+  border-radius: 0.2rem;
+}
+
+.travel-card-details {
+  margin: 0.8rem;
+}
+
+.travel-card-details .desc {
+  margin: 0.8rem 0;
+}
+
+.travel-card-details h3 {
+  font-size: 1.1rem;
+}
+
+.read-more {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--primary-color);
+  border-radius: 0.3rem;
+  background: transparent;
+}
