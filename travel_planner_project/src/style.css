@@ -13,3 +13,23 @@
 body {
   font-family: "poppins", sans-serif;
 }
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem;
+}
+
+header .logo {
+  display: flex;
+  align-items: center;
+}
+
+header .logo h1 {
+  font-size: 1.2rem;
+}
+
+header .logo i {
+  color: var(--primary-color);
+}
