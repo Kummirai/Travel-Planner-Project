@@ -4,6 +4,7 @@
   --gray-color: #f8f9fa;
   --text-color: #212529;
   --primary-hover: #076996;
+  --border: #bbbbbb;
 }
 
 * {
@@ -186,8 +187,46 @@ header nav a:hover {
   align-self: center;
 }
 
-.btn-destinations:hover{
+.btn-destinations:hover {
   background: var(--primary-hover);
   color: var(--gray-color);
   cursor: pointer;
+}
+
+.features {
+  display: flex;
+  flex-direction: column;
+  margin-top: 4rem;
+}
+
+.features h2 {
+  text-align: center;
+  font-size: 1.8rem;
+  color: var(--text-color);
+}
+
+.features .feature-card-container {
+  padding: 3rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.feature-card {
+  box-shadow: 0 0 4px var(--border);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.85rem;
+}
+
+.feature-card i {
+  font-size: 2.4rem;
+  color: var(--primary-hover);
+}
+
+.feature-card h3 {
+  margin: 1rem 0;
 }
