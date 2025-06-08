@@ -1,7 +1,8 @@
 :root {
-  --primary-color: ;
-  --secondary-color: ;
-  --text-color: ;
+  --primary-color: #4fc3f7;
+  --secondary-color: #ff7043;
+  --gray-color: #f8f9fa;
+  --text-color: #212529;
 }
 
 * {
@@ -28,8 +29,23 @@ header .logo {
 
 header .logo h1 {
   font-size: 1.2rem;
+  color: var(--text-color);
 }
 
 header .logo i {
   color: var(--primary-color);
+  font-size: 1.6rem;
+  margin-right: 0.5rem;
+}
+
+header nav a {
+  text-decoration: none;
+  color: var(--text-color);
+  margin: 0.8rem;
+  padding: 0 0 0.3rem 0;
+}
+
+header nav a:hover {
+  border-bottom: 2px solid var(--primary-color);
+  width: 80%;
 }
