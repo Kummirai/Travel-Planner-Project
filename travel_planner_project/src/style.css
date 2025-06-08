@@ -303,7 +303,7 @@ header nav a:hover {
   align-items: center;
   justify-content: space-between;
   box-shadow: 0 0px 4px rgba(165, 165, 165, 0.9);
-  padding: 1.6rem;
+  padding: 1rem 1.6rem;
   border-radius: 0.6rem;
 }
 
@@ -327,4 +327,12 @@ header nav a:hover {
   object-fit: cover;
   border-radius: 50%;
   object-position: top;
+}
+
+.stars {
+  margin: 0.5rem 0;
+}
+
+.stars .fas {
+  color: orange;
 }
