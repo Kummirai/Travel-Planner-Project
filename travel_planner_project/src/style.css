@@ -68,6 +68,7 @@ header nav a:hover {
   font-size: 3.4rem;
   font-weight: 500;
   color: var(--gray-color);
+  text-align: center;
 }
 
 .hero p {
@@ -75,9 +76,10 @@ header nav a:hover {
   color: var(--gray-color);
   font-weight: 500;
   font-size: 1.2rem;
+  text-align: center;
 }
 
-.hero .btn {
+.btn {
   padding: 0.8rem 1.8rem;
   border-radius: 0.3rem;
   font-size: 1.1rem;
@@ -106,11 +108,30 @@ header nav a:hover {
   cursor: pointer;
 }
 
+.popular-destinations {
+  display: flex;
+  flex-direction: column;
+}
+
 .destinations {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 2rem;
-  padding: 3rem;
+  padding: 4rem 3rem;
+}
+
+.popular-destinations .heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 4rem;
+}
+
+.popular-destinations .heading h2 {
+  font-size: 2rem;
+  margin-bottom: 0.8rem;
+  color: var(--text-color);
 }
 
 .img {
@@ -155,4 +176,12 @@ header nav a:hover {
   background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)),
     url("https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80");
   background-size: cover;
+}
+
+.btn-destinations {
+  border: 1px solid var(--primary-hover);
+  background-color: transparent;
+  color: var(--primary-hover);
+  width: fit-content;
+  align-self: center;
 }
