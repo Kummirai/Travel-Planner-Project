@@ -230,3 +230,57 @@ header nav a:hover {
 .feature-card h3 {
   margin: 1rem 0;
 }
+
+.banner {
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* align-items: center; */
+  background: linear-gradient(
+      135deg,
+      rgba(0, 0, 0, 0.1) 0%,
+      rgba(0, 0, 0, 0.3) 100%
+    ),
+    url(https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2100&q=8);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  padding: 6rem;
+  margin: 4rem 0;
+}
+
+.banner h2 {
+  color: var(--gray-color);
+  font-size: 3rem;
+}
+
+.banner p {
+  color: var(--gray-color);
+  margin: 1.5rem 0;
+  font-size: 1.4rem;
+}
+
+.banner .btn {
+  border: 2px solid transparent;
+}
+
+.banner .btn:hover {
+  cursor: pointer;
+  border: 2px solid var(--primary-hover);
+}
+
+.banner .free:hover {
+  background-color: var(--gray-color);
+  color: var(--primary-hover);
+}
+
+.banner .how-it-works {
+  color: var(--primary-hover);
+  border: 2px solid var(--primary-hover);
+}
+
+.banner .how-it-works:hover {
+  background: var(--primary-hover);
+  color: var(--gray-color);
+}
