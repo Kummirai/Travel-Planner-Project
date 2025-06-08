@@ -3,6 +3,7 @@
   --secondary-color: #ff7043;
   --gray-color: #f8f9fa;
   --text-color: #212529;
+  --primary-hover: #0696da;
 }
 
 * {
@@ -48,4 +49,59 @@ header nav a {
 header nav a:hover {
   border-bottom: 2px solid var(--primary-color);
   width: 80%;
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)),
+    url("https://images.unsplash.com/photo-1499678329028-101435549a4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.hero h2 {
+  font-size: 3.4rem;
+  font-weight: 500;
+  color: var(--gray-color);
+}
+
+.hero p {
+  margin: 1.5rem 0;
+  color: var(--gray-color);
+  font-weight: 500;
+  font-size: 1.2rem;
+}
+
+.hero .btn {
+  padding: 0.8rem 1.8rem;
+  border-radius: 0.3rem;
+  font-size: 1.1rem;
+  margin: 0.3rem;
+}
+
+.btn-primary {
+  background: var(--primary-hover);
+  color: var(--gray-color);
+  border: 2px solid transparent;
+}
+
+.btn-border {
+  border: 2px solid var(--gray-color);
+  background: transparent;
+  color: var(--gray-color);
+}
+
+.hero .btn-primary:hover {
+  background: var(--primary-color);
+  cursor: pointer;
+}
+
+.hero .btn-border:hover {
+  border: 2px solid var(--primary-color);
+  cursor: pointer;
 }
