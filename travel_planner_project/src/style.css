@@ -5,6 +5,11 @@
   --text-color: #212529;
   --primary-hover: #076996;
   --border: #bbbbbb;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 * {
