@@ -143,6 +143,7 @@ header nav a:hover {
   flex-direction: column;
   justify-content: flex-end;
   padding: 1rem;
+  box-shadow:  0 5px 5px var(--gray-color);
 }
 
 .img h3 {
