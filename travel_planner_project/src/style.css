@@ -263,6 +263,10 @@ header nav a:hover {
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
 }
 
+.heading-readability {
+  text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.9);
+}
+
 .banner p {
   color: var(--gray-color);
   margin: 1.5rem 0;
@@ -291,4 +295,36 @@ header nav a:hover {
 .banner .how-it-works:hover {
   background: var(--primary-hover);
   color: var(--gray-color);
+}
+
+.traveller-stories .card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 0px 4px rgba(165, 165, 165, 0.9);
+  padding: 1.6rem;
+  border-radius: 0.6rem;
+}
+
+.circular-img-container {
+  width: 100px;
+}
+
+.traveller-stories p {
+  margin: 0.5rem 0;
+  text-align: center;
+}
+
+.traveller-stories h4 {
+  margin: 0.3rem 0;
+}
+
+.circular-img {
+  width: 100%;
+  height: 100px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 50%;
+  object-position: top;
 }
