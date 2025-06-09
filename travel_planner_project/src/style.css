@@ -144,6 +144,8 @@ header nav a:hover {
 
 .heading p {
   font-size: 1.3rem;
+  padding: 0 1rem;
+  text-align: center;
 }
 
 .img {
