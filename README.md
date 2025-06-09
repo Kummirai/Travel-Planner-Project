@@ -1,6 +1,6 @@
 # 🌍 Travel Planner Web App
 
-[Site](https://travel-planner-wdd330.netlify.app/) - Travel planner
+[Site](https://travel-planner-wdd330.netlify.app/) - Travel Planner
 
 A modern travel planning application built with Vite and vanilla JavaScript that helps users organize their perfect trips.
 
