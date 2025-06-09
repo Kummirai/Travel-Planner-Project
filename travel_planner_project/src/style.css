@@ -421,3 +421,7 @@ header nav a:hover {
   color: var(--primary-hover);
   font-size: 1.2rem;
 }
+
+.your-journey h2 {
+  font-size: 3.6rem;
+}
