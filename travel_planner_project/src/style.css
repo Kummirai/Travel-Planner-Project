@@ -142,6 +142,10 @@ header nav a:hover {
   color: var(--text-color);
 }
 
+.heading p {
+  font-size: 1.3rem;
+}
+
 .img {
   min-height: 250px;
   border-radius: 0.5rem;
@@ -381,4 +385,23 @@ header nav a:hover {
   border: 1px solid var(--primary-color);
   border-radius: 0.3rem;
   background: transparent;
+}
+
+#how-it-works h3 {
+  padding: 0.6rem 1.2rem;
+  border-radius: 50%;
+  background: var(--primary-hover);
+  color: var(--gray-color);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+#how-it-works h4 {
+  font-size: 1.8rem;
+  margin-bottom: 0.9rem;
+}
+
+#how-it-works .feature-card p {
+  text-align: center;
+  font-size: 1.1rem;
 }
