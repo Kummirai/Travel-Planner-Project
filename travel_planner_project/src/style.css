@@ -500,3 +500,9 @@ header nav a:hover {
   font-size: 1rem;
   flex: 1;
 }
+
+.newsletter .assurance {
+  color: var(--text-color);
+  font-size: 0.95rem;
+  margin: 0.5rem;
+}
