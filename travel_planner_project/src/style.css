@@ -424,3 +424,48 @@ header nav a:hover {
 .your-journey h2 {
   font-size: 3.6rem;
 }
+
+.plans h3 {
+  border-bottom: 1px solid var(--primary-hover);
+  padding-bottom: 0.5rem;
+  color: var(--text-color);
+  font-size: 2.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.plans h4 {
+  font-size: 1.6rem;
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+}
+
+.plans h4 span {
+  color: var(--primary-hover);
+}
+
+.plans ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0;
+}
+
+.plans ul li {
+  font-size: 1.1rem;
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+}
+
+.plans button {
+  margin-top: 1.5rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.3rem;
+  font-size: 1rem;
+  background: var(--primary-hover);
+  color: var(--gray-color);
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.active{
+  border: 1px solid var(--primary-hover);
+}
