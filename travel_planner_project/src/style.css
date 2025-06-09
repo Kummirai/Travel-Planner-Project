@@ -469,3 +469,12 @@ header nav a:hover {
 .active{
   border: 1px solid var(--primary-hover);
 }
+
+.choose-your-plan .feature-card  i{
+  font-size: 1.1rem;
+  margin-right: 0.5rem ;
+}
+
+.choose-your-plan .feature-card .fa-times{
+  color: var(--secondary-color);
+}
