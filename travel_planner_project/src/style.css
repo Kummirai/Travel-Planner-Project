@@ -466,15 +466,37 @@ header nav a:hover {
   cursor: pointer;
 }
 
-.active{
+.active {
   border: 1px solid var(--primary-hover);
 }
 
-.choose-your-plan .feature-card  i{
+.choose-your-plan .feature-card i {
   font-size: 1.1rem;
-  margin-right: 0.5rem ;
+  margin-right: 0.5rem;
 }
 
-.choose-your-plan .feature-card .fa-times{
+.choose-your-plan .feature-card .fa-times {
   color: var(--secondary-color);
+}
+
+.newsletter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 4rem;
+}
+
+.newsletter-form {
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  width: 50%;
+}
+
+.newsletter-form input[type="email"] {
+  padding: 0.95rem 1.2rem;
+  border: 1px solid var(--border);
+  border-radius: 0.3rem;
+  font-size: 1rem;
+  flex: 1;
 }
