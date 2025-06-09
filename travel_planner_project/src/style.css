@@ -40,7 +40,7 @@ header .logo h1 {
   color: var(--text-color);
 }
 
-header .logo i {
+.fa-plane-departure {
   color: var(--primary-color);
   font-size: 1.6rem;
   margin-right: 0.5rem;
@@ -404,4 +404,20 @@ header nav a:hover {
 #how-it-works .feature-card p {
   text-align: center;
   font-size: 1.1rem;
+}
+
+.your-journey {
+  align-items: center;
+  height: 70vh;
+  background-image: url("https://images.unsplash.com/photo-1503220317375-aaad61436b1b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80");
+}
+
+.your-journey .fa-plane-departure {
+  color: var(--gray-color);
+  font-size: 1.2rem;
+}
+
+.your-journey .fa-plane-departure:hover {
+  color: var(--primary-hover);
+  font-size: 1.2rem;
 }
