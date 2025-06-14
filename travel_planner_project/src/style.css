@@ -5,6 +5,7 @@
   --text-color: #212529;
   --primary-hover: #076996;
   --border: #bbbbbb;
+  --white: #fff;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -571,4 +572,57 @@ footer {
   font-size: 1.6rem;
   margin-right: 0.5rem;
   transition: color 0.3s ease;
+}
+
+/*Login styles*/
+.login-container {
+  min-height: 100vh;
+}
+
+.form-group {
+  height: 100%;
+}
+
+form {
+  max-width: 400px;
+  margin: 0 auto;
+  box-shadow: 0 0 2px rgba(0, 171, 238, 0.459);
+  padding: 0.8rem;
+  border-radius: 0.5rem;
+}
+
+form p {
+  font-size: 0.85rem;
+  color: var(--text-color);
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  color: var(--text-color);
+}
+label span {
+  margin: 0.3rem;
+  font-size: 0.85rem;
+}
+
+input {
+  padding: 0.8rem 1rem;
+  border: 1px solid rgba(153, 153, 153, 0.6);
+  border-radius: 0.2rem;
+  margin-bottom: 0.9rem;
+  width: 100%;
+  font-size: 0.9rem;
+}
+
+input[type="submit"] {
+  background-color: var(--primary-hover);
+  border: none;
+  color: var(--white);
+  font-size: 0.95rem;
+}
+
+input[type="submit"]:hover {
+  background-color: var(--primary-color);
+  cursor: pointer;
 }
