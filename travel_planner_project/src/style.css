@@ -577,25 +577,36 @@ footer {
 
 /*Login styles*/
 .login-container {
-  min-height: 100vh;
+  height: 100vh;
+  background-image: url("");
 }
 
 .form-group {
-  height: 100%;
+  min-height: calc(100vh - 100px);
+  display: flex;
+  align-items: center;
+  background-image: url("https://images.unsplash.com/photo-1499678329028-101435549a4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 form {
-  max-width: 400px;
+  width: 400px;
   margin: 0 auto;
-  box-shadow: 0 0px 10px rgba(189, 189, 189, 0.979);
-  border: 1px solid rgba(0, 167, 179, 0.199);
-  padding: 0.8rem;
-  border-radius: 0.5rem;
+  padding: 2rem 1.4rem;
+  border: none;
+  border-radius: 12px;
+  background-color: rgba(122, 122, 122, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
 }
 
 form p {
   font-size: 0.85rem;
-  color: var(--text-color);
+  color: var(--white);
 }
 
 label {
@@ -606,12 +617,13 @@ label {
 label span {
   margin: 0.3rem;
   font-size: 0.9rem;
+  color: var(--white);
 }
 
 input {
   padding: 0.8rem 1rem;
   border: 1px solid rgba(153, 153, 153, 0.6);
-  border-radius: 0.2rem;
+  border-radius: 0.35rem;
   margin-bottom: 0.9rem;
   width: 100%;
   font-size: 0.8rem;
@@ -627,4 +639,11 @@ input[type="submit"] {
 input[type="submit"]:hover {
   background-color: var(--primary-color);
   cursor: pointer;
+}
+
+form a {
+  color: var(--border);
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 1rem;
+  padding-left: 0.3rem;
 }
