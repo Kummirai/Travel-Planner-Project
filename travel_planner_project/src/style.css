@@ -587,7 +587,8 @@ footer {
 form {
   max-width: 400px;
   margin: 0 auto;
-  box-shadow: 0 0 2px rgba(0, 171, 238, 0.459);
+  box-shadow: 0 0px 10px rgba(189, 189, 189, 0.979);
+  border: 1px solid rgba(0, 167, 179, 0.199);
   padding: 0.8rem;
   border-radius: 0.5rem;
 }
@@ -604,7 +605,7 @@ label {
 }
 label span {
   margin: 0.3rem;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
 }
 
 input {
@@ -613,7 +614,7 @@ input {
   border-radius: 0.2rem;
   margin-bottom: 0.9rem;
   width: 100%;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
 }
 
 input[type="submit"] {

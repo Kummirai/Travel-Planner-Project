@@ -8,7 +8,62 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     />
+    <link rel="stylesheet" href="../style.css" />
     <title>Sign Up</title>
   </head>
-  <body></body>
+  <body>
+    <div class="login-container">
+      <header>
+        <div class="logo">
+          <i class="fas fa-plane-departure"></i>
+          <h1><a href="../../index.html">Travel Planner</a></h1>
+        </div>
+      </header>
+      <div class="form-group">
+        <form action="">
+          <label for="first_name">
+            <span>First Name</span>
+            <input
+              type="text"
+              name="first_name"
+              id="first_name"
+              required
+              placeholder="Your Name"
+            />
+          </label>
+          <label for="last_name">
+            <span>First Name</span>
+            <input
+              type="text"
+              name="last_name"
+              id="last_name"
+              required
+              placeholder="YourLast Name"
+            />
+          </label>
+          <label for="email">
+            <span>Email</span>
+            <input
+              type="email"
+              name="email"
+              id="email"
+              required
+              placeholder="Email"
+            />
+          </label>
+          <label for="password">
+            <span>Password</span>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              placeholder="Password"
+            />
+          </label>
+          <input type="submit" value="Sign Up" />
+          <p>Already have an account <a href="login.html">Log In</a></p>
+        </form>
+      </div>
+    </div>
+  </body>
 </html>
