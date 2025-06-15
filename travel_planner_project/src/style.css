@@ -67,7 +67,7 @@ header nav a:hover {
   align-items: center;
   min-height: 90vh;
   background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0)),
-    url("/images/hero.webp");
+    url("../public/images/hero.webp");
   background-size: cover;
   background-position: top;
   background-repeat: no-repeat;
@@ -258,7 +258,7 @@ header nav a:hover {
       rgba(0, 0, 0, 0) 0%,
       rgba(0, 0, 0, 0) 100%
     ),
-    url("/images/travel.webp");
+    url("../public/images/travel.webp");
   background-size: cover;
   background-position: top center;
   background-attachment: fixed;
