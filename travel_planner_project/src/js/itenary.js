@@ -1,18 +1,22 @@
 document.addEventListener("DOMContentLoaded", function () {
+  // Add Day button click handler
   const addDayBtn = document.getElementById("addDayBtn");
   if (addDayBtn) {
     addDayBtn.addEventListener("click", function () {
+      // Show the add day modal
       const addDayModal = new bootstrap.Modal(
         document.getElementById("addDayModal")
       );
       addDayModal.show();
 
+      // Set default date to trip start date or today
       const tripStartDate = document.getElementById("tripStartDate").value;
       document.getElementById("dayDate").value =
         tripStartDate || new Date().toISOString().split("T")[0];
     });
   }
 
+  // Save Day button in modal
   const saveDayBtn = document.getElementById("saveDayBtn");
   if (saveDayBtn) {
     saveDayBtn.addEventListener("click", function () {
@@ -26,6 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
+      // Create new day element
       addDayToItinerary({
         id: generateId(),
         date: dayDate,
@@ -33,6 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
         activities: [],
       });
 
+      // Hide modal and reset form
       bootstrap.Modal.getInstance(
         document.getElementById("addDayModal")
       ).hide();
@@ -40,6 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  // Add Activity button in each day
   document.addEventListener("click", function (e) {
     if (e.target.classList.contains("add-activity-btn")) {
       const dayId = e.target.closest(".accordion-item").id.replace("day-", "");
@@ -52,6 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+  // Save Activity button in modal
   const saveActivityBtn = document.getElementById("saveActivityBtn");
   if (saveActivityBtn) {
     saveActivityBtn.addEventListener("click", function () {
@@ -71,6 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
+      // Create activity object
       const activity = {
         id: generateId(),
         name: activityName,
@@ -81,8 +90,10 @@ document.addEventListener("DOMContentLoaded", function () {
         notes: activityNotes,
       };
 
+      // Add activity to the day
       addActivityToDay(dayId, activity);
 
+      // Hide modal and reset form
       bootstrap.Modal.getInstance(
         document.getElementById("addActivityModal")
       ).hide();
@@ -95,10 +106,12 @@ function addDayToItinerary(dayData) {
   const accordion = document.getElementById("itineraryAccordion");
   const noDaysMessage = document.getElementById("noDaysMessage");
 
+  // Hide "no days" message if it's visible
   if (!noDaysMessage.classList.contains("d-none")) {
     noDaysMessage.classList.add("d-none");
   }
 
+  // Create accordion item for the day
   const accordionItem = document.createElement("div");
   accordionItem.className = "accordion-item";
   accordionItem.id = `day-${dayData.id}`;
@@ -138,6 +151,7 @@ function addDayToItinerary(dayData) {
 
   accordion.appendChild(accordionItem);
 
+  // Add existing activities if they exist
   if (dayData.activities && dayData.activities.length > 0) {
     dayData.activities.forEach((activity) => {
       addActivityToDay(dayData.id, activity);
@@ -149,6 +163,7 @@ function addActivityToDay(dayId, activity) {
   const activitiesContainer = document.getElementById(`activities-${dayId}`);
   const noActivitiesMessage = document.getElementById(`noActivities-${dayId}`);
 
+  // Hide "no activities" message if it's visible
   if (
     noActivitiesMessage &&
     !noActivitiesMessage.classList.contains("d-none")
@@ -156,6 +171,7 @@ function addActivityToDay(dayId, activity) {
     noActivitiesMessage.classList.add("d-none");
   }
 
+  // Create activity element
   const activityElement = document.createElement("div");
   activityElement.className = "list-group-item";
   activityElement.innerHTML = `

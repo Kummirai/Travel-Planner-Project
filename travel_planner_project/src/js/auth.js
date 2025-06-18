@@ -28,10 +28,8 @@ function handleLogin(e) {
     return;
   }
 
-  // Get users from localStorage or initialize empty array
   const users = JSON.parse(localStorage.getItem("users")) || [];
 
-  // Find user by email
   const user = users.find((u) => u.email === email);
 
   if (!user) {
@@ -39,13 +37,11 @@ function handleLogin(e) {
     return;
   }
 
-  // In a real app, we would verify hashed password
   if (user.password !== password) {
     showAlert("Incorrect password", "danger");
     return;
   }
 
-  // Store current user in localStorage
   localStorage.setItem(
     "currentUser",
     JSON.stringify({
@@ -55,7 +51,6 @@ function handleLogin(e) {
     })
   );
 
-  // Redirect to dashboard
   window.location.href = "dashboard.html";
 }
 
@@ -69,7 +64,6 @@ function handleRegister(e) {
     "registerConfirmPassword"
   ).value;
 
-  // Validate inputs
   if (!name || !email || !password || !confirmPassword) {
     showAlert("Please fill in all fields", "danger");
     return;
@@ -90,10 +84,8 @@ function handleRegister(e) {
     return;
   }
 
-  // Get users from localStorage or initialize empty array
   const users = JSON.parse(localStorage.getItem("users")) || [];
 
-  // Check if user already exists
   const userExists = users.some((u) => u.email === email);
 
   if (userExists) {
@@ -101,20 +93,17 @@ function handleRegister(e) {
     return;
   }
 
-  // Create new user
   const newUser = {
     id: generateId(),
     name,
     email,
-    password, // In a real app, we would hash the password
+    password,
     createdAt: new Date().toISOString(),
   };
 
-  // Save user
   users.push(newUser);
   localStorage.setItem("users", JSON.stringify(users));
 
-  // Store current user in localStorage
   localStorage.setItem(
     "currentUser",
     JSON.stringify({
@@ -124,7 +113,6 @@ function handleRegister(e) {
     })
   );
 
-  // Redirect to dashboard
   showAlert("Registration successful!", "success");
   setTimeout(() => {
     window.location.href = "dashboard.html";
