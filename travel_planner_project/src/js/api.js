@@ -252,7 +252,6 @@ async function handleApiResponse(response, url) {
         }
       }
     } catch (parseError) {
-      // If we can't parse the error response, use the original message
       console.error("Error parsing API error response:", parseError);
     }
 
@@ -347,6 +346,135 @@ async function fetchFlightsFromAmadeus(params) {
   }
 }
 
+// In-memory storage replacement for localStorage
+let tripsData = [];
+
+// Initialize with sample trip data if needed
+function initializeTripsData() {
+  if (tripsData.length === 0) {
+    // Create a sample trip for testing
+    tripsData = [
+      {
+        id: "sample-trip-1",
+        name: "Sample Trip",
+        flights: [],
+        hotels: [],
+        budget: {
+          estimated: {
+            Flights: 0,
+            Hotels: 0,
+            Food: 0,
+            Activities: 0,
+            Transportation: 0,
+            Other: 0,
+          },
+          actual: {
+            Flights: 0,
+            Hotels: 0,
+            Food: 0,
+            Activities: 0,
+            Transportation: 0,
+            Other: 0,
+          },
+          estimatedTotal: 0,
+          actualTotal: 0,
+        },
+      },
+    ];
+  }
+}
+
+// Fixed saveFlightToTrip function
+function saveFlightToTrip(flight) {
+  // Initialize data if needed
+  initializeTripsData();
+
+  // Get trip ID from URL params or use default
+  const urlParams = new URLSearchParams(window.location.search);
+  let tripId = urlParams.get("id");
+
+  // If no trip ID in URL, use the first available trip
+  if (!tripId && tripsData.length > 0) {
+    tripId = tripsData[0].id;
+  }
+
+  if (!tripId) {
+    showAlert("No trip selected", "danger");
+    return;
+  }
+
+  // Find the trip
+  const tripIndex = tripsData.findIndex((t) => t.id === tripId);
+
+  if (tripIndex === -1) {
+    showAlert("Trip not found", "danger");
+    return;
+  }
+
+  // Initialize flights array if it doesn't exist
+  if (!tripsData[tripIndex].flights) {
+    tripsData[tripIndex].flights = [];
+  }
+
+  // Check if this flight already exists
+  const existingIndex = tripsData[tripIndex].flights.findIndex(
+    (f) => f.id === flight.id
+  );
+
+  if (existingIndex >= 0) {
+    // Update existing flight
+    tripsData[tripIndex].flights[existingIndex] = flight;
+    showAlert("Flight updated in trip!", "info");
+  } else {
+    // Add new flight
+    tripsData[tripIndex].flights.push(flight);
+    showAlert("Flight saved to trip!", "success");
+  }
+
+  // Initialize budget if it doesn't exist
+  if (!tripsData[tripIndex].budget) {
+    tripsData[tripIndex].budget = {
+      estimated: {
+        Flights: 0,
+        Hotels: 0,
+        Food: 0,
+        Activities: 0,
+        Transportation: 0,
+        Other: 0,
+      },
+      actual: {
+        Flights: 0,
+        Hotels: 0,
+        Food: 0,
+        Activities: 0,
+        Transportation: 0,
+        Other: 0,
+      },
+      estimatedTotal: 0,
+      actualTotal: 0,
+    };
+  }
+
+  // Update budget only if it's a new flight
+  if (existingIndex === -1) {
+    tripsData[tripIndex].budget.estimated.Flights += flight.price;
+    tripsData[tripIndex].budget.estimatedTotal += flight.price;
+  }
+
+  // Update UI elements if they exist
+  updateSavedFlightsDisplay(tripsData[tripIndex].flights);
+  updateBudgetDisplay(tripsData[tripIndex].budget);
+
+  // Update the button to show it's saved
+  const saveBtn = document.querySelector(`[data-flight-id="${flight.id}"]`);
+  if (saveBtn) {
+    saveBtn.innerHTML = '<i class="fas fa-check me-1"></i> Saved';
+    saveBtn.classList.remove("btn-outline-primary");
+    saveBtn.classList.add("btn-success");
+    saveBtn.disabled = true;
+  }
+}
+
 // Main flight search function
 async function searchFlights(searchParams) {
   const formattedDepartureDate = formatDateForAPI(searchParams.departureDate);
@@ -408,7 +536,122 @@ async function searchFlights(searchParams) {
   }
 }
 
+// Fixed displayFlightResults function with proper event delegation
+function displayFlightResults(flights) {
+  const resultsContainer = document.getElementById("flightResultsContainer");
+  const resultsList = document.getElementById("flightResultsList");
+
+  // Clear previous results
+  resultsList.innerHTML = "";
+
+  if (flights.length === 0) {
+    resultsList.innerHTML =
+      '<div class="text-center py-4"><p class="text-muted">No flights found. Please try different dates or destinations.</p></div>';
+    resultsContainer.style.display = "block";
+    return;
+  }
+
+  // Display flight results
+  flights.forEach((flight) => {
+    const flightElement = document.createElement("div");
+    flightElement.className = "list-group-item";
+    flightElement.innerHTML = `
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h6 class="mb-1">${flight.airline} - ${flight.flightNumber}</h6>
+          <small class="text-muted">
+            ${flight.departure.airport} → ${flight.arrival.airport} • 
+            ${flight.duration} • ${
+      flight.stops === 0
+        ? "Nonstop"
+        : `${flight.stops} stop${flight.stops > 1 ? "s" : ""}`
+    }
+          </small>
+        </div>
+        <div class="text-end">
+          <h5 class="mb-1">${formatCurrency(flight.price, flight.currency)}</h5>
+          <button class="btn btn-sm btn-outline-primary save-flight-btn" 
+                  data-flight-id="${flight.id}"
+                  type="button">
+            <i class="far fa-save me-1"></i> Save
+          </button>
+        </div>
+      </div>
+      <div class="mt-2">
+        <small>
+          <strong>Depart:</strong> ${formatDate(flight.departure.date)} at ${
+      flight.departure.time
+    } • 
+          <strong>Arrive:</strong> ${formatDate(flight.arrival.date)} at ${
+      flight.arrival.time
+    }
+        </small>
+      </div>
+    `;
+
+    resultsList.appendChild(flightElement);
+  });
+
+  // Show results container
+  resultsContainer.style.display = "block";
+
+  // Remove old event listeners and add new ones using event delegation
+  resultsList.removeEventListener("click", handleSaveFlightClick);
+  resultsList.addEventListener("click", handleSaveFlightClick);
+
+  // Store flights data for access in click handler
+  resultsList.flightsData = flights;
+}
+
+// Separate click handler function for better event management
+function handleSaveFlightClick(event) {
+  const saveBtn = event.target.closest(".save-flight-btn");
+  if (!saveBtn) return;
+
+  event.preventDefault();
+  event.stopPropagation();
+
+  const flightId = saveBtn.getAttribute("data-flight-id");
+  const flights = event.currentTarget.flightsData || [];
+  const flight = flights.find((f) => f.id === flightId);
+
+  if (flight) {
+    saveFlightToTrip(flight);
+  } else {
+    showAlert("Flight data not found", "danger");
+  }
+}
+
+// Helper function to update saved flights display
+function updateSavedFlightsDisplay(flights) {
+  const container = document.getElementById("savedFlightsContainer");
+  if (container) {
+    loadSavedFlights(flights);
+  }
+}
+
+// Helper function to update budget display
+function updateBudgetDisplay(budget) {
+  // Update budget display elements if they exist
+  const budgetElements = document.querySelectorAll("[data-budget-category]");
+  budgetElements.forEach((element) => {
+    const category = element.getAttribute("data-budget-category");
+    if (budget.estimated[category] !== undefined) {
+      element.textContent = formatCurrency(budget.estimated[category]);
+    }
+  });
+
+  const totalElement = document.getElementById("budgetTotal");
+  if (totalElement) {
+    totalElement.textContent = formatCurrency(budget.estimatedTotal);
+  }
+}
+
+// Initialize the system when DOM is loaded
 document.addEventListener("DOMContentLoaded", function () {
+  initializeTripsData();
+
+  // Flight search form handler
   const flightSearchForm = document.getElementById("flightSearchForm");
   if (flightSearchForm) {
     flightSearchForm.addEventListener("submit", async function (e) {
@@ -470,6 +713,48 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   }
+
+  // Hotel search form handler
+  const hotelSearchForm = document.getElementById("hotelSearchForm");
+  if (hotelSearchForm) {
+    hotelSearchForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const location = document.getElementById("hotelLocation").value;
+      const checkIn = document.getElementById("hotelCheckIn").value;
+      const checkOut = document.getElementById("hotelCheckOut").value;
+      const guests = document.getElementById("hotelGuests").value;
+      const rooms = document.getElementById("hotelRooms").value;
+
+      if (!location || !checkIn || !checkOut) {
+        showAlert("Please fill in required fields", "danger");
+        return;
+      }
+
+      // Show loading state
+      const submitBtn = hotelSearchForm.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn.innerHTML;
+      submitBtn.innerHTML =
+        '<i class="fas fa-spinner fa-spin me-1"></i> Searching...';
+      submitBtn.disabled = true;
+
+      // Perform search
+      searchHotels({
+        location,
+        checkIn,
+        checkOut,
+        guests,
+        rooms,
+      }).then((hotels) => {
+        // Restore button
+        submitBtn.innerHTML = originalBtnText;
+        submitBtn.disabled = false;
+
+        // Display results
+        displayHotelResults(hotels);
+      });
+    });
+  }
 });
 
 // Mock hotel search
@@ -515,131 +800,6 @@ function searchHotels(searchParams) {
 
       resolve(mockHotels);
     }, 1000);
-  });
-}
-
-// Hotel search form handler
-document.addEventListener("DOMContentLoaded", function () {
-  // Hotel search form handler
-  const hotelSearchForm = document.getElementById("hotelSearchForm");
-  if (hotelSearchForm) {
-    hotelSearchForm.addEventListener("submit", function (e) {
-      e.preventDefault();
-
-      const location = document.getElementById("hotelLocation").value;
-      const checkIn = document.getElementById("hotelCheckIn").value;
-      const checkOut = document.getElementById("hotelCheckOut").value;
-      const guests = document.getElementById("hotelGuests").value;
-      const rooms = document.getElementById("hotelRooms").value;
-
-      if (!location || !checkIn || !checkOut) {
-        showAlert("Please fill in required fields", "danger");
-        return;
-      }
-
-      // Show loading state
-      const submitBtn = hotelSearchForm.querySelector('button[type="submit"]');
-      const originalBtnText = submitBtn.innerHTML;
-      submitBtn.innerHTML =
-        '<i class="fas fa-spinner fa-spin me-1"></i> Searching...';
-      submitBtn.disabled = true;
-
-      // Perform search
-      searchHotels({
-        location,
-        checkIn,
-        checkOut,
-        guests,
-        rooms,
-      }).then((hotels) => {
-        // Restore button
-        submitBtn.innerHTML = originalBtnText;
-        submitBtn.disabled = false;
-
-        // Display results
-        displayHotelResults(hotels);
-      });
-    });
-  }
-});
-
-function displayFlightResults(flights) {
-  const resultsContainer = document.getElementById("flightResultsContainer");
-  const resultsList = document.getElementById("flightResultsList");
-
-  // Clear previous results
-  resultsList.innerHTML = "";
-
-  if (flights.length === 0) {
-    resultsList.innerHTML =
-      '<div class="text-center py-4"><p class="text-muted">No flights found. Please try different dates or destinations.</p></div>';
-    resultsContainer.style.display = "block";
-    return;
-  }
-
-  // Add new results
-  flights.forEach((flight) => {
-    const flightElement = document.createElement("a");
-    flightElement.href = "#";
-    flightElement.className = "list-group-item list-group-item-action";
-    flightElement.innerHTML = `
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h6 class="mb-1">${flight.airline} - ${
-      flight.flightNumber
-    }</h6>
-                    <small class="text-muted">
-                        ${flight.departure.airport} → ${
-      flight.arrival.airport
-    } • 
-                        ${flight.duration} • ${
-      flight.stops === 0
-        ? "Nonstop"
-        : `${flight.stops} stop${flight.stops > 1 ? "s" : ""}`
-    }
-                    </small>
-                </div>
-                <div class="text-end">
-                    <h5 class="mb-1">${formatCurrency(
-                      flight.price,
-                      flight.currency
-                    )}</h5>
-                    <button class="btn btn-sm btn-outline-primary save-flight-btn" data-flight-id="${
-                      flight.id
-                    }">
-                        <i class="far fa-save me-1"></i> Save
-                    </button>
-                </div>
-            </div>
-            <div class="mt-2">
-                <small>
-                    <strong>Depart:</strong> ${formatDate(
-                      flight.departure.date
-                    )} at ${flight.departure.time} • 
-                    <strong>Arrive:</strong> ${formatDate(
-                      flight.arrival.date
-                    )} at ${flight.arrival.time}
-                </small>
-            </div>
-        `;
-
-    resultsList.appendChild(flightElement);
-  });
-
-  // Show results container
-  resultsContainer.style.display = "block";
-
-  // Add event listeners to save buttons
-  document.querySelectorAll(".save-flight-btn").forEach((btn) => {
-    btn.addEventListener("click", function (e) {
-      e.preventDefault();
-      const flightId = this.getAttribute("data-flight-id");
-      const flight = flights.find((f) => f.id === flightId);
-
-      if (flight) {
-        saveFlightToTrip(flight);
-      }
-    });
   });
 }
 
@@ -717,79 +877,6 @@ function displayHotelResults(hotels) {
   });
 }
 
-function saveFlightToTrip(flight) {
-  const urlParams = new URLSearchParams(window.location.search);
-  const tripId = urlParams.get("id");
-
-  if (!tripId) {
-    showAlert("No trip selected", "danger");
-    return;
-  }
-
-  // Get trips from localStorage
-  const trips = JSON.parse(localStorage.getItem("trips")) || [];
-  const tripIndex = trips.findIndex((t) => t.id === tripId);
-
-  if (tripIndex === -1) {
-    showAlert("Trip not found", "danger");
-    return;
-  }
-
-  // Add flight to trip
-  if (!trips[tripIndex].flights) {
-    trips[tripIndex].flights = [];
-  }
-
-  // Check if this flight already exists
-  const existingIndex = trips[tripIndex].flights.findIndex(
-    (f) => f.id === flight.id
-  );
-
-  if (existingIndex >= 0) {
-    // Update existing flight
-    trips[tripIndex].flights[existingIndex] = flight;
-  } else {
-    // Add new flight
-    trips[tripIndex].flights.push(flight);
-  }
-
-  // Update budget
-  if (!trips[tripIndex].budget) {
-    trips[tripIndex].budget = {
-      estimated: {
-        Flights: 0,
-        Hotels: 0,
-        Food: 0,
-        Activities: 0,
-        Transportation: 0,
-        Other: 0,
-      },
-      actual: {
-        Flights: 0,
-        Hotels: 0,
-        Food: 0,
-        Activities: 0,
-        Transportation: 0,
-        Other: 0,
-      },
-      estimatedTotal: 0,
-      actualTotal: 0,
-    };
-  }
-
-  trips[tripIndex].budget.estimated.Flights += flight.price;
-  trips[tripIndex].budget.estimatedTotal += flight.price;
-
-  // Save trips
-  localStorage.setItem("trips", JSON.stringify(trips));
-
-  // Update UI
-  loadSavedFlights(trips[tripIndex].flights);
-  updateBudgetDisplay(trips[tripIndex].budget);
-
-  showAlert("Flight saved to trip!", "success");
-}
-
 function saveHotelToTrip(hotel) {
   const urlParams = new URLSearchParams(window.location.search);
   const tripId = urlParams.get("id");
@@ -799,9 +886,8 @@ function saveHotelToTrip(hotel) {
     return;
   }
 
-  // Get trips from localStorage
-  const trips = JSON.parse(localStorage.getItem("trips")) || [];
-  const tripIndex = trips.findIndex((t) => t.id === tripId);
+  // Get trips from in-memory storage
+  const tripIndex = tripsData.findIndex((t) => t.id === tripId);
 
   if (tripIndex === -1) {
     showAlert("Trip not found", "danger");
@@ -809,21 +895,23 @@ function saveHotelToTrip(hotel) {
   }
 
   // Add hotel to trip
-  if (!trips[tripIndex].hotels) {
-    trips[tripIndex].hotels = [];
+  if (!tripsData[tripIndex].hotels) {
+    tripsData[tripIndex].hotels = [];
   }
 
   // Check if this hotel already exists
-  const existingIndex = trips[tripIndex].hotels.findIndex(
+  const existingIndex = tripsData[tripIndex].hotels.findIndex(
     (h) => h.id === hotel.id
   );
 
   if (existingIndex >= 0) {
     // Update existing hotel
-    trips[tripIndex].hotels[existingIndex] = hotel;
+    tripsData[tripIndex].hotels[existingIndex] = hotel;
+    showAlert("Hotel updated in trip!", "info");
   } else {
     // Add new hotel
-    trips[tripIndex].hotels.push(hotel);
+    tripsData[tripIndex].hotels.push(hotel);
+    showAlert("Hotel saved to trip!", "success");
   }
 
   // Calculate total price for the stay
@@ -832,9 +920,9 @@ function saveHotelToTrip(hotel) {
   const nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
   const totalPrice = hotel.pricePerNight * nights;
 
-  // Update budget
-  if (!trips[tripIndex].budget) {
-    trips[tripIndex].budget = {
+  // Initialize budget if it doesn't exist
+  if (!tripsData[tripIndex].budget) {
+    tripsData[tripIndex].budget = {
       estimated: {
         Flights: 0,
         Hotels: 0,
@@ -856,17 +944,24 @@ function saveHotelToTrip(hotel) {
     };
   }
 
-  trips[tripIndex].budget.estimated.Hotels += totalPrice;
-  trips[tripIndex].budget.estimatedTotal += totalPrice;
+  // Update budget only if it's a new hotel
+  if (existingIndex === -1) {
+    tripsData[tripIndex].budget.estimated.Hotels += totalPrice;
+    tripsData[tripIndex].budget.estimatedTotal += totalPrice;
+  }
 
-  // Save trips
-  localStorage.setItem("trips", JSON.stringify(trips));
+  // Update UI elements if they exist
+  updateSavedHotelsDisplay(tripsData[tripIndex].hotels);
+  updateBudgetDisplay(tripsData[tripIndex].budget);
 
-  // Update UI
-  loadSavedHotels(trips[tripIndex].hotels);
-  updateBudgetDisplay(trips[tripIndex].budget);
-
-  showAlert("Hotel saved to trip!", "success");
+  // Update the button to show it's saved
+  const saveBtn = document.querySelector(`[data-hotel-id="${hotel.id}"]`);
+  if (saveBtn) {
+    saveBtn.innerHTML = '<i class="fas fa-check me-1"></i> Saved';
+    saveBtn.classList.remove("btn-primary");
+    saveBtn.classList.add("btn-success");
+    saveBtn.disabled = true;
+  }
 }
 
 function loadSavedFlights(flights) {
