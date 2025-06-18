@@ -63,29 +63,29 @@
         </div>
 
         <!-- Trip Navigation -->
-        <ul class="nav-tabs" id="tripTabs">
-          <li class="nav-item">
-            <button class="nav-link active" data-tab="details">
+        <ul class="tab-nav" id="tripTabs">
+          <li class="tab-item">
+            <button class="tab-link active" data-tab="details">
               <i class="fas fa-info-circle me-1"></i> Details
             </button>
           </li>
-          <li class="nav-item">
-            <button class="nav-link" data-tab="itinerary">
+          <li class="tab-item">
+            <button class="tab-link" data-tab="itinerary">
               <i class="fas fa-calendar-alt me-1"></i> Itinerary
             </button>
           </li>
-          <li class="nav-item">
-            <button class="nav-link" data-tab="flights">
+          <li class="tab-item">
+            <button class="tab-link" data-tab="flights">
               <i class="fas fa-plane me-1"></i> Flights
             </button>
           </li>
-          <li class="nav-item">
-            <button class="nav-link" data-tab="hotels">
+          <li class="tab-item">
+            <button class="tab-link" data-tab="hotels">
               <i class="fas fa-hotel me-1"></i> Hotels
             </button>
           </li>
-          <li class="nav-item">
-            <button class="nav-link" data-tab="budget">
+          <li class="tab-item">
+            <button class="tab-link" data-tab="budget">
               <i class="fas fa-wallet me-1"></i> Budget
             </button>
           </li>
@@ -465,26 +465,25 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="./src/js/util.js"></script>
     <script src="./src/js/auth.js"></script>
-    <script src="./src/js/trip.js"></script>
-    <script src="./src/js/itinerary.js"></script>
+    <script src="./src/js/itenary.js"></script>
     <script src="./src/js/api.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        // Check if user is logged in
+        // Existing authentication check
         if (!localStorage.getItem("currentUser")) {
           window.location.href = "auth.html?action=login";
           return;
         }
 
-        // Display user name in navbar
+        // Existing user display logic
         const currentUser = JSON.parse(localStorage.getItem("currentUser"));
         if (currentUser && currentUser.name) {
           document.querySelector(
             ".dropdown-toggle"
-          ).innerHTML = `<i class="fas fa-user-circle me-1"></i> ${currentUser.name}`;
+          ).innerHTML = `<i class="fas fa-user-circle"></i> ${currentUser.name}`;
         }
 
-        // Logout functionality
+        // Existing logout functionality
         document
           .getElementById("logoutBtn")
           .addEventListener("click", function () {
@@ -492,25 +491,62 @@
             window.location.href = "auth.html?action=login";
           });
 
-        // Initialize the page based on URL parameters
+        // Initialize custom tab system
+        initTabSystem();
+
+        // Rest of your existing initialization code
         const urlParams = new URLSearchParams(window.location.search);
         const tripId = urlParams.get("id");
         const action = urlParams.get("action");
 
         if (action === "new") {
-          // Initialize a new trip
           initializeNewTrip();
         } else if (tripId) {
-          // Load an existing trip
           loadTrip(tripId);
         } else {
-          // No trip specified, redirect to dashboard
           window.location.href = "dashboard.html";
         }
 
-        // Initialize budget chart
         initializeBudgetChart();
       });
+
+      // Custom Tab System Functionality
+      function initTabSystem() {
+        const tabLinks = document.querySelectorAll(".tab-link");
+
+        tabLinks.forEach((link) => {
+          link.addEventListener("click", function (e) {
+            e.preventDefault();
+
+            // Remove active class from all tabs and panes
+            document.querySelectorAll(".tab-link").forEach((tab) => {
+              tab.classList.remove("active");
+            });
+            document.querySelectorAll(".tab-pane").forEach((pane) => {
+              pane.classList.remove("active");
+            });
+
+            // Add active class to clicked tab and corresponding pane
+            this.classList.add("active");
+            const tabId = this.getAttribute("data-tab");
+            document.getElementById(tabId).classList.add("active");
+
+            // If you need to save the active tab state
+            localStorage.setItem("lastActiveTab", tabId);
+          });
+        });
+
+        // Optional: Restore last active tab if needed
+        const lastActiveTab = localStorage.getItem("lastActiveTab");
+        if (lastActiveTab) {
+          const tabToActivate = document.querySelector(
+            `[data-tab="${lastActiveTab}"]`
+          );
+          if (tabToActivate) {
+            tabToActivate.click();
+          }
+        }
+      }
 
       function initializeNewTrip() {
         // Set default dates (today and tomorrow)
