@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Travel Planner - Authentication</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Open+Sans:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./src/auth.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">
+          <i class="fas fa-plane-departure"></i>Travel Planner
+        </a>
+      </div>
+    </nav>
+
+    <main class="auth-container">
+      <div class="container">
+        <div class="auth-card" id="login-form">
+          <div class="auth-card-body">
+            <h2 class="auth-card-title">Welcome Back</h2>
+            <form id="loginForm">
+              <div>
+                <label for="loginEmail" class="form-label">Email address</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="loginEmail"
+                  required
+                  placeholder="Enter your email"
+                />
+              </div>
+              <div>
+                <label for="loginPassword" class="form-label">Password</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="loginPassword"
+                  required
+                  placeholder="Enter your password"
+                />
+              </div>
+              <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Login</button>
+              </div>
+              <div class="text-center">
+                <p class="mb-0">
+                  Don't have an account?
+                  <a href="auth.html?action=register">Register</a>
+                </p>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="auth-card d-none" id="register-form">
+          <div class="auth-card-body">
+            <h2 class="auth-card-title">Create Account</h2>
+            <form id="registerForm">
+              <div>
+                <label for="registerName" class="form-label">Full Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="registerName"
+                  required
+                  placeholder="Enter your full name"
+                />
+              </div>
+              <div>
+                <label for="registerEmail" class="form-label"
+                  >Email address</label
+                >
+                <input
+                  type="email"
+                  class="form-control"
+                  id="registerEmail"
+                  required
+                  placeholder="Enter your email"
+                />
+              </div>
+              <div>
+                <label for="registerPassword" class="form-label"
+                  >Password</label
+                >
+                <input
+                  type="password"
+                  class="form-control"
+                  id="registerPassword"
+                  required
+                  placeholder="Create a password"
+                />
+              </div>
+              <div>
+                <label for="registerConfirmPassword" class="form-label"
+                  >Confirm Password</label
+                >
+                <input
+                  type="password"
+                  class="form-control"
+                  id="registerConfirmPassword"
+                  required
+                  placeholder="Confirm your password"
+                />
+              </div>
+              <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Register</button>
+              </div>
+              <div class="text-center">
+                <p class="mb-0">
+                  Already have an account?
+                  <a href="auth.html?action=login">Login</a>
+                </p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+      // Show the appropriate form based on URL parameter
+      document.addEventListener("DOMContentLoaded", function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const action = urlParams.get("action");
+
+        if (action === "register") {
+          document.getElementById("login-form").classList.add("d-none");
+          document.getElementById("register-form").classList.remove("d-none");
+        } else {
+          document.getElementById("login-form").classList.remove("d-none");
+          document.getElementById("register-form").classList.add("d-none");
+        }
+      });
+    </script>
+  </body>
+</html>

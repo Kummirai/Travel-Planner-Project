@@ -1,0 +1,186 @@
+/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Open Sans", sans-serif;
+  color: #333;
+  min-height: 100vh;
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    url("https://images.unsplash.com/photo-1499678329028-101435549a4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80")
+      no-repeat center center fixed;
+  background-size: cover;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+}
+
+a {
+  text-decoration: none;
+  color: rgba(52, 152, 219, 0.9);
+  font-weight: 500;
+}
+
+a:hover {
+  color: rgba(41, 128, 185, 1);
+}
+
+/* Layout */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+/* Navigation */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.navbar-brand {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  color: #2c3e50;
+}
+
+.navbar-brand i {
+  margin-right: 8px;
+  color: #2c3e50;
+}
+
+/* Auth Container */
+.auth-container {
+  min-height: calc(100vh - 56px);
+  display: flex;
+  align-items: center;
+  padding: 40px 0;
+}
+
+/* Auth Card */
+.auth-card {
+  border: none;
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  color: #ffffff;
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto;
+}
+
+.auth-card-body {
+  padding: 32px 40px;
+  color: #ffffff;
+}
+
+.auth-card-title {
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 24px;
+  font-size: 1.75rem;
+}
+
+/* Forms */
+.form-label {
+  display: block;
+  color: #ffffff;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  color: #ffffff;
+  margin-bottom: 16px;
+}
+
+.form-control::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.form-control:focus {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: #ffffff;
+  outline: none;
+  box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.15);
+}
+
+/* Buttons */
+.btn {
+  display: block;
+  width: 100%;
+  padding: 12px 0;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.btn-primary {
+  background-color: rgba(52, 152, 219, 0.8);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: rgba(41, 128, 185, 0.9);
+}
+
+/* Utility Classes */
+.text-center {
+  text-align: center;
+}
+
+.mb-0 {
+  margin-bottom: 0;
+}
+
+.mb-3 {
+  margin-bottom: 16px;
+}
+
+.mb-4 {
+  margin-bottom: 24px;
+}
+
+.d-none {
+  display: none;
+}
+
+.shadow {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .auth-card-body {
+    padding: 24px;
+  }
+}
