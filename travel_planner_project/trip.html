@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Travel Planner - Trip</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Open+Sans:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./src/style.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="container">
+        <div class="navbar-content">
+          <a class="navbar-brand" href="index.html">
+            <i class="fas fa-plane-departure me-2"></i>Travel Planner
+          </a>
+          <ul class="navbar-nav">
+            <li><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+            <li>
+              <a class="nav-link active" href="trip.html?action=new"
+                >New Trip</a
+              >
+            </li>
+            <li class="dropdown">
+              <button class="dropdown-toggle" id="navbarDropdown">
+                <i class="fas fa-user-circle me-1"></i> User Name
+              </button>
+              <div class="dropdown-menu" id="dropdownMenu">
+                <a class="dropdown-item" href="#">Profile</a>
+                <a class="dropdown-item" href="#" id="logoutBtn">Logout</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="py-4">
+      <div class="container">
+        <!-- Trip Header -->
+        <div class="trip-header">
+          <div class="trip-info">
+            <h1 id="tripName">New Trip</h1>
+            <p class="trip-dates" id="tripDates"></p>
+          </div>
+          <div class="trip-actions">
+            <button class="btn btn-outline-secondary" id="saveTripBtn">
+              <i class="far fa-save me-1"></i> Save
+            </button>
+            <button class="btn btn-primary" id="exportTripBtn">
+              <i class="fas fa-file-export me-1"></i> Export
+            </button>
+          </div>
+        </div>
+
+        <!-- Trip Navigation -->
+        <ul class="nav-tabs" id="tripTabs">
+          <li class="nav-item">
+            <button class="nav-link active" data-tab="details">
+              <i class="fas fa-info-circle me-1"></i> Details
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" data-tab="itinerary">
+              <i class="fas fa-calendar-alt me-1"></i> Itinerary
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" data-tab="flights">
+              <i class="fas fa-plane me-1"></i> Flights
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" data-tab="hotels">
+              <i class="fas fa-hotel me-1"></i> Hotels
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" data-tab="budget">
+              <i class="fas fa-wallet me-1"></i> Budget
+            </button>
+          </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="tripTabContent">
+          <!-- Details Tab -->
+          <div class="tab-pane active" id="details">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Trip Information</h5>
+                    <form id="tripDetailsForm">
+                      <div class="form-group">
+                        <label for="tripNameInput" class="form-label"
+                          >Trip Name</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="tripNameInput"
+                          required
+                        />
+                      </div>
+                      <div class="form-group">
+                        <label for="tripDestination" class="form-label"
+                          >Destination</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="tripDestination"
+                          required
+                        />
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="tripStartDate" class="form-label"
+                              >Start Date</label
+                            >
+                            <input
+                              type="date"
+                              class="form-control"
+                              id="tripStartDate"
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="tripEndDate" class="form-label"
+                              >End Date</label
+                            >
+                            <input
+                              type="date"
+                              class="form-control"
+                              id="tripEndDate"
+                              required
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="tripDescription" class="form-label"
+                          >Description</label
+                        >
+                        <textarea
+                          class="form-control"
+                          id="tripDescription"
+                          rows="3"
+                        ></textarea>
+                      </div>
+                      <div class="form-group">
+                        <label for="tripStatus" class="form-label"
+                          >Status</label
+                        >
+                        <select class="form-select" id="tripStatus">
+                          <option value="Planning">Planning</option>
+                          <option value="In Progress">In Progress</option>
+                          <option value="Completed">Completed</option>
+                          <option value="Cancelled">Cancelled</option>
+                        </select>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Trip Preferences</h5>
+                    <div class="form-group">
+                      <label class="form-label">Interests</label>
+                      <div class="interests-grid">
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="interestAdventure"
+                          />
+                          <label
+                            class="form-check-label"
+                            for="interestAdventure"
+                            >Adventure</label
+                          >
+                        </div>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="interestCulture"
+                          />
+                          <label class="form-check-label" for="interestCulture"
+                            >Culture</label
+                          >
+                        </div>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="interestFood"
+                          />
+                          <label class="form-check-label" for="interestFood"
+                            >Food</label
+                          >
+                        </div>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="interestNature"
+                          />
+                          <label class="form-check-label" for="interestNature"
+                            >Nature</label
+                          >
+                        </div>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="interestRelaxation"
+                          />
+                          <label
+                            class="form-check-label"
+                            for="interestRelaxation"
+                            >Relaxation</label
+                          >
+                        </div>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="interestShopping"
+                          />
+                          <label class="form-check-label" for="interestShopping"
+                            >Shopping</label
+                          >
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="tripBudget" class="form-label"
+                        >Budget Range</label
+                      >
+                      <select class="form-select" id="tripBudget">
+                        <option value="Budget">Budget ($)</option>
+                        <option value="Mid-range">Mid-range ($$)</option>
+                        <option value="Luxury">Luxury ($$$)</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="tripPace" class="form-label"
+                        >Travel Pace</label
+                      >
+                      <select class="form-select" id="tripPace">
+                        <option value="Relaxed">Relaxed</option>
+                        <option value="Moderate">Moderate</option>
+                        <option value="Fast-paced">Fast-paced</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Itinerary Tab -->
+          <div class="tab-pane" id="itinerary">
+            <div class="card">
+              <div class="card-body">
+                <div
+                  class="d-flex justify-content-between align-items-center mb-3"
+                >
+                  <h5 class="card-title mb-0">Daily Itinerary</h5>
+                  <button class="btn btn-sm btn-primary" id="addDayBtn">
+                    <i class="fas fa-plus me-1"></i> Add Day
+                  </button>
+                </div>
+                <div class="accordion" id="itineraryAccordion">
+                  <div class="empty-state" id="noDaysMessage">
+                    <i class="far fa-calendar-alt"></i>
+                    <h4>No days added yet</h4>
+                    <p>Start by adding your first day</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Flights Tab -->
+          <div class="tab-pane" id="flights">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title mb-4">Flight Information</h5>
+                <div class="row">
+                  <div class="col-md-6">
+                    <form id="flightSearchForm">
+                      <div class="form-group">
+                        <label for="flightOrigin" class="form-label"
+                          >From</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="flightOrigin"
+                          placeholder="City or Airport"
+                          required
+                        />
+                      </div>
+                      <div class="form-group">
+                        <label for="flightDestination" class="form-label"
+                          >To</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="flightDestination"
+                          placeholder="City or Airport"
+                          required
+                        />
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="flightDepartureDate" class="form-label"
+                              >Departure Date</label
+                            >
+                            <input
+                              type="date"
+                              class="form-control"
+                              id="flightDepartureDate"
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="flightReturnDate" class="form-label"
+                              >Return Date (optional)</label
+                            >
+                            <input
+                              type="date"
+                              class="form-control"
+                              id="flightReturnDate"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="flightPassengers" class="form-label"
+                          >Passengers</label
+                        >
+                        <select class="form-select" id="flightPassengers">
+                          <option value="1">1 Adult</option>
+                          <option value="2">2 Adults</option>
+                          <option value="3">3 Adults</option>
+                          <option value="4">4 Adults</option>
+                        </select>
+                      </div>
+                      <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search me-1"></i> Search Flights
+                      </button>
+                    </form>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="bg-light">
+                      <h6 class="mb-3">Saved Flights</h6>
+                      <div id="savedFlightsContainer">
+                        <p class="text-muted mb-0">No flights saved yet</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="mt-4 d-none" id="flightResultsContainer">
+                  <h6 class="mb-3">Flight Results</h6>
+                  <div class="list-group" id="flightResultsList">
+                    <!-- Flight results will be added here -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hotels Tab -->
+          <div class="tab-pane" id="hotels">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title mb-4">Hotel Information</h5>
+                <div class="row">
+                  <div class="col-md-6">
+                    <form id="hotelSearchForm">
+                      <div class="form-group">
+                        <label for="hotelLocation" class="form-label"
+                          >Location</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="hotelLocation"
+                          placeholder="City or Hotel Name"
+                          required
+                        />
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="hotelCheckIn" class="form-label"
+                              >Check-in Date</label
+                            >
+                            <input
+                              type="date"
+                              class="form-control"
+                              id="hotelCheckIn"
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="hotelCheckOut" class="form-label"
+                              >Check-out Date</label
+                            >
+                            <input
+                              type="date"
+                              class="form-control"
+                              id="hotelCheckOut"
+                              required
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="hotelGuests" class="form-label"
+                              >Guests</label
+                            >
+                            <select class="form-select" id="hotelGuests">
+                              <option value="1">1 Guest</option>
+                              <option value="2">2 Guests</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
