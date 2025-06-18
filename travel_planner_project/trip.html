@@ -470,11 +470,13 @@
     <script src="./src/js/api.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
+        // Check if user is logged in
         if (!localStorage.getItem("currentUser")) {
           window.location.href = "auth.html?action=login";
           return;
         }
 
+        // Display user name in navbar
         const currentUser = JSON.parse(localStorage.getItem("currentUser"));
         if (currentUser && currentUser.name) {
           document.querySelector(
@@ -482,6 +484,7 @@
           ).innerHTML = `<i class="fas fa-user-circle me-1"></i> ${currentUser.name}`;
         }
 
+        // Logout functionality
         document
           .getElementById("logoutBtn")
           .addEventListener("click", function () {
@@ -489,22 +492,28 @@
             window.location.href = "auth.html?action=login";
           });
 
+        // Initialize the page based on URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const tripId = urlParams.get("id");
         const action = urlParams.get("action");
 
         if (action === "new") {
+          // Initialize a new trip
           initializeNewTrip();
         } else if (tripId) {
+          // Load an existing trip
           loadTrip(tripId);
         } else {
+          // No trip specified, redirect to dashboard
           window.location.href = "dashboard.html";
         }
 
+        // Initialize budget chart
         initializeBudgetChart();
       });
 
       function initializeNewTrip() {
+        // Set default dates (today and tomorrow)
         const today = new Date();
         const tomorrow = new Date();
         tomorrow.setDate(today.getDate() + 1);
@@ -516,6 +525,7 @@
         document.getElementById("hotelCheckIn").valueAsDate = today;
         document.getElementById("hotelCheckOut").valueAsDate = tomorrow;
 
+        // Generate a new trip ID
         document.getElementById("tripNameInput").value = "My New Trip";
       }
 
@@ -529,6 +539,7 @@
           return;
         }
 
+        // Populate trip details
         document.getElementById("tripName").textContent = trip.name;
         document.getElementById("tripNameInput").value = trip.name;
         document.getElementById("tripDestination").value = trip.destination;
@@ -542,25 +553,30 @@
           trip.description || "";
         document.getElementById("tripStatus").value = trip.status || "Planning";
 
+        // Calculate and display trip dates
         const startDate = formatDate(trip.startDate);
         const endDate = formatDate(trip.endDate);
         document.getElementById(
           "tripDates"
         ).textContent = `${startDate} - ${endDate}`;
 
+        // Load itinerary days if they exist
         if (trip.days && trip.days.length > 0) {
           document.getElementById("noDaysMessage").classList.add("d-none");
           loadItineraryDays(trip.days);
         }
 
+        // Load saved flights if they exist
         if (trip.flights && trip.flights.length > 0) {
           loadSavedFlights(trip.flights);
         }
 
+        // Load saved hotels if they exist
         if (trip.hotels && trip.hotels.length > 0) {
           loadSavedHotels(trip.hotels);
         }
 
+        // Load budget data if it exists
         if (trip.budget) {
           updateBudgetDisplay(trip.budget);
         }
@@ -605,6 +621,7 @@
       }
 
       function updateBudgetDisplay(budgetData) {
+        // Update the budget summary
         document.getElementById(
           "estimatedBudget"
         ).textContent = `$${budgetData.estimatedTotal.toFixed(2)}`;
@@ -617,6 +634,7 @@
           "remainingBudget"
         ).textContent = `$${remaining.toFixed(2)}`;
 
+        // Update progress bar
         const progressPercentage =
           (budgetData.actualTotal / budgetData.estimatedTotal) * 100;
         document.getElementById("budgetProgressBar").style.width = `${Math.min(
@@ -624,6 +642,7 @@
           100
         )}%`;
 
+        // Update the expense table
         const categories = [
           "Flights",
           "Hotels",
@@ -648,6 +667,7 @@
           tableBody.appendChild(row);
         });
 
+        // Update the chart
         updateBudgetChart([
           budgetData.actual.Flights || 0,
           budgetData.actual.Hotels || 0,
