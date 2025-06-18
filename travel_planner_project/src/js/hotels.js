@@ -1,0 +1,626 @@
+// Hotel Search API using Amadeus
+// This file handles all hotel-related API calls using the Amadeus API
+
+// Amadeus Hotel API Configuration
+const AMADEUS_HOTEL_CONFIG = {
+  baseUrl: "https://test.api.amadeus.com/v3",
+  searchUrl: "https://test.api.amadeus.com/v3/shopping/hotel-offers",
+  listUrl:
+    "https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-city",
+  authUrl: "https://test.api.amadeus.com/v1/security/oauth2/token",
+  clientId: "xxyJOp6MsTG5aVE88cXJAPrzt30B28iK",
+  clientSecret: "hMptf8cl16y64mV6",
+};
+
+// City code mappings for hotel searches
+const CITY_CODE_MAPPINGS = {
+  // South Africa
+  JOHANNESBURG: "JNB",
+  JHB: "JNB",
+  JOBURG: "JNB",
+  "CAPE TOWN": "CPT",
+  CAPETOWN: "CPT",
+  DURBAN: "DUR",
+  "PORT ELIZABETH": "PLZ",
+  PE: "PLZ",
+  BLOEMFONTEIN: "BFN",
+  PRETORIA: "JNB", // Close to Johannesburg
+
+  // Zimbabwe
+  HARARE: "HRE",
+  ZIMBABWE: "HRE",
+  BULAWAYO: "BUQ",
+
+  // Popular African Cities
+  LAGOS: "LOS",
+  ABUJA: "ABV",
+  NAIROBI: "NBO",
+  "ADDIS ABABA": "ADD",
+  ADDIS: "ADD",
+  CAIRO: "CAI",
+  KAMPALA: "EBB",
+  ACCRA: "ACC",
+  MAPUTO: "MPM",
+  "DAR ES SALAAM": "DAR",
+  LUSAKA: "LUN",
+  WINDHOEK: "WDH",
+
+  // Europe
+  LONDON: "LON",
+  PARIS: "PAR",
+  AMSTERDAM: "AMS",
+  BERLIN: "BER",
+  MADRID: "MAD",
+  ROME: "ROM",
+  VIENNA: "VIE",
+  ZURICH: "ZUR",
+  GENEVA: "GVA",
+  FRANKFURT: "FRA",
+  MUNICH: "MUC",
+  BARCELONA: "BCN",
+  MILAN: "MIL",
+  VENICE: "VCE",
+  FLORENCE: "FLR",
+  LISBON: "LIS",
+  PORTO: "OPO",
+  ATHENS: "ATH",
+  ISTANBUL: "IST",
+  MOSCOW: "MOW",
+  "ST PETERSBURG": "LED",
+
+  // North America
+  "NEW YORK": "NYC",
+  NEWYORK: "NYC",
+  "LOS ANGELES": "LAX",
+  LA: "LAX",
+  CHICAGO: "CHI",
+  ATLANTA: "ATL",
+  MIAMI: "MIA",
+  "LAS VEGAS": "LAS",
+  VEGAS: "LAS",
+  "SAN FRANCISCO": "SFO",
+  TORONTO: "YTO",
+  MONTREAL: "YMQ",
+  VANCOUVER: "YVR",
+
+  // Asia
+  DUBAI: "DXB",
+  "ABU DHABI": "AUH",
+  DELHI: "DEL",
+  MUMBAI: "BOM",
+  BANGALORE: "BLR",
+  CHENNAI: "MAA",
+  KOLKATA: "CCU",
+  BEIJING: "BJS",
+  SHANGHAI: "SHA",
+  "HONG KONG": "HKG",
+  SINGAPORE: "SIN",
+  TOKYO: "TYO",
+  OSAKA: "OSA",
+  KYOTO: "KIX", // Using nearby Osaka airport code
+  SEOUL: "SEL",
+  BANGKOK: "BKK",
+  "HO CHI MINH": "SGN",
+  HANOI: "HAN",
+  "KUALA LUMPUR": "KUL",
+  JAKARTA: "JKT",
+  MANILA: "MNL",
+
+  // Oceania
+  SYDNEY: "SYD",
+  MELBOURNE: "MEL",
+  BRISBANE: "BNE",
+  PERTH: "PER",
+  ADELAIDE: "ADL",
+  AUCKLAND: "AKL",
+  WELLINGTON: "WLG",
+  CHRISTCHURCH: "CHC",
+
+  // South America
+  "SAO PAULO": "SAO",
+  SAOPAULO: "SAO",
+  "RIO DE JANEIRO": "RIO",
+  RIO: "RIO",
+  "BUENOS AIRES": "BUE",
+  SANTIAGO: "SCL",
+  LIMA: "LIM",
+  BOGOTA: "BOG",
+  CARACAS: "CCS",
+
+  // Middle East
+  DOHA: "DOH",
+  RIYADH: "RUH",
+  JEDDAH: "JED",
+  "TEL AVIV": "TLV",
+  JERUSALEM: "JRS",
+  AMMAN: "AMM",
+  BEIRUT: "BEY",
+  KUWAIT: "KWI",
+};
+
+// Validate and convert city name to IATA code
+function validateCityCode(cityName) {
+  if (!cityName) return null;
+
+  const upperCity = cityName.toUpperCase().trim();
+
+  // Check direct mapping
+  if (CITY_CODE_MAPPINGS[upperCity]) {
+    return CITY_CODE_MAPPINGS[upperCity];
+  }
+
+  // If it's already a 3-letter code, validate it exists in our mappings
+  if (/^[A-Z]{3}$/.test(upperCity)) {
+    const isValidCode = Object.values(CITY_CODE_MAPPINGS).includes(upperCity);
+    return isValidCode ? upperCity : null;
+  }
+
+  // Try partial matching for common variations
+  const partialMatch = Object.keys(CITY_CODE_MAPPINGS).find(
+    (key) => key.includes(upperCity) || upperCity.includes(key)
+  );
+
+  return partialMatch ? CITY_CODE_MAPPINGS[partialMatch] : null;
+}
+
+// Get Amadeus token (reuse from main API file)
+async function getAmadeusTokenForHotels() {
+  if (amadeusAccessToken && tokenExpiration && new Date() < tokenExpiration) {
+    return amadeusAccessToken;
+  }
+
+  try {
+    const response = await fetch(AMADEUS_HOTEL_CONFIG.authUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        grant_type: "client_credentials",
+        client_id: AMADEUS_HOTEL_CONFIG.clientId,
+        client_secret: AMADEUS_HOTEL_CONFIG.clientSecret,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.text();
+      throw new Error(
+        `Hotel API Authentication failed: ${response.status} - ${errorData}`
+      );
+    }
+
+    const data = await response.json();
+    amadeusAccessToken = data.access_token;
+    tokenExpiration = new Date(Date.now() + (data.expires_in - 300) * 1000);
+    return amadeusAccessToken;
+  } catch (error) {
+    console.error("Error getting Amadeus token for hotels:", error);
+    throw error;
+  }
+}
+
+// Calculate number of nights between two dates
+function calculateNights(checkIn, checkOut) {
+  const checkInDate = new Date(checkIn);
+  const checkOutDate = new Date(checkOut);
+  const timeDifference = checkOutDate.getTime() - checkInDate.getTime();
+  return Math.ceil(timeDifference / (1000 * 3600 * 24));
+}
+
+// Format hotel amenities
+function formatAmenities(amenities) {
+  if (!amenities || !Array.isArray(amenities)) return [];
+
+  const amenityMap = {
+    WIFI: "Free WiFi",
+    PARKING: "Parking",
+    RESTAURANT: "Restaurant",
+    BAR: "Bar",
+    FITNESS: "Fitness Center",
+    POOL: "Swimming Pool",
+    SPA: "Spa",
+    BUSINESS_CENTER: "Business Center",
+    ROOM_SERVICE: "Room Service",
+    CONCIERGE: "Concierge",
+    LAUNDRY: "Laundry Service",
+    PET_FRIENDLY: "Pet Friendly",
+    ACCESSIBLE: "Wheelchair Accessible",
+    AIR_CONDITIONING: "Air Conditioning",
+    ELEVATOR: "Elevator",
+  };
+
+  return amenities.map((amenity) => amenityMap[amenity] || amenity).slice(0, 5);
+}
+
+// Generate hotel placeholder image URL that actually works
+function getHotelImageUrl(hotelName, location) {
+  // Use a working placeholder service with proper encoding
+  const text = encodeURIComponent(`${hotelName}`);
+  return `https://images.unsplash.com/photo-1566073771259-6a8506099945?w=300&h=200&fit=crop&crop=entropy&auto=format&q=60&txt=${text}`;
+}
+
+// Search hotels using Amadeus API
+async function searchHotelsFromAmadeus(params) {
+  try {
+    // Validate city code
+    const validCityCode = validateCityCode(params.location);
+    if (!validCityCode) {
+      throw new Error(
+        `Invalid city: "${params.location}". Please use a major city name (e.g., Johannesburg, Cape Town, Harare)`
+      );
+    }
+
+    // Validate dates - Fixed date validation logic
+    const checkInDate = new Date(params.checkIn);
+    const checkOutDate = new Date(params.checkOut);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset time to start of day for proper comparison
+
+    // Set check-in date to start of day for comparison
+    const checkInDateOnly = new Date(checkInDate);
+    checkInDateOnly.setHours(0, 0, 0, 0);
+
+    if (checkInDateOnly < today) {
+      throw new Error("Check-in date cannot be in the past");
+    }
+
+    if (checkOutDate <= checkInDate) {
+      throw new Error("Check-out date must be after check-in date");
+    }
+
+    const nights = calculateNights(params.checkIn, params.checkOut);
+    if (nights > 30) {
+      throw new Error("Maximum stay is 30 nights");
+    }
+
+    console.log(`Searching hotels in ${validCityCode} for ${nights} nights`);
+
+    const token = await getAmadeusTokenForHotels();
+
+    // First, get hotels in the city
+    const hotelListUrl = new URL(AMADEUS_HOTEL_CONFIG.listUrl);
+    hotelListUrl.searchParams.append("cityCode", validCityCode);
+
+    const hotelListResponse = await fetch(hotelListUrl, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!hotelListResponse.ok) {
+      const errorText = await hotelListResponse.text();
+      throw new Error(
+        `Failed to get hotels list: ${hotelListResponse.status} - ${errorText}`
+      );
+    }
+
+    const hotelListData = await hotelListResponse.json();
+
+    if (!hotelListData.data || hotelListData.data.length === 0) {
+      throw new Error(
+        `No hotels found in ${params.location}. Please try a different city or check your spelling.`
+      );
+    }
+
+    // Get hotel IDs (limit to first 20 for performance)
+    const hotelIds = hotelListData.data
+      .slice(0, 20)
+      .map((hotel) => hotel.hotelId);
+
+    // Search for offers
+    const searchUrl = new URL(AMADEUS_HOTEL_CONFIG.searchUrl);
+    searchUrl.searchParams.append("hotelIds", hotelIds.join(","));
+    searchUrl.searchParams.append("checkInDate", params.checkIn);
+    searchUrl.searchParams.append("checkOutDate", params.checkOut);
+    searchUrl.searchParams.append("adults", params.guests || 1);
+    searchUrl.searchParams.append("rooms", params.rooms || 1);
+    searchUrl.searchParams.append("currency", "ZAR");
+
+    console.log(`Searching offers for ${hotelIds.length} hotels`);
+
+    const offersResponse = await fetch(searchUrl, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!offersResponse.ok) {
+      const errorText = await offersResponse.text();
+      throw new Error(
+        `Failed to get hotel offers: ${offersResponse.status} - ${errorText}`
+      );
+    }
+
+    const offersData = await offersResponse.json();
+
+    if (!offersData.data || offersData.data.length === 0) {
+      throw new Error(
+        `No hotel offers available for the selected dates in ${params.location}. Please try different dates.`
+      );
+    }
+
+    console.log(`Found ${offersData.data.length} hotel offers`);
+
+    // Process and format hotel offers
+    return offersData.data
+      .map((offer) => {
+        const hotel = offer.hotel;
+        const roomOffer = offer.offers[0]; // Take first offer
+        const price = roomOffer.price;
+
+        // Convert price to ZAR if needed
+        const pricePerNight =
+          price.currency === "ZAR"
+            ? parseFloat(price.total) / nights
+            : convertToZAR(parseFloat(price.total) / nights, price.currency);
+
+        return {
+          id: generateId(),
+          hotelId: hotel.hotelId,
+          name: hotel.name || `Hotel in ${params.location}`,
+          location: params.location,
+          checkIn: params.checkIn,
+          checkOut: params.checkOut,
+          nights: nights,
+          pricePerNight: pricePerNight,
+          totalPrice: pricePerNight * nights,
+          currency: "ZAR",
+          originalPrice: parseFloat(price.total),
+          originalCurrency: price.currency,
+          rating: hotel.rating || Math.random() * 2 + 3, // Random rating 3-5 if not available
+          amenities: formatAmenities(hotel.amenities),
+          roomType: roomOffer.room?.type?.description || "Standard Room",
+          boardType: roomOffer.boardType || "ROOM_ONLY",
+          cancellationPolicy:
+            roomOffer.policies?.cancellation?.type || "NON_REFUNDABLE",
+          image: getHotelImageUrl(hotel.name || "Hotel", params.location),
+          address: hotel.address || `${params.location} City Center`,
+        };
+      })
+      .sort((a, b) => a.pricePerNight - b.pricePerNight); // Sort by price
+  } catch (error) {
+    console.error("Amadeus hotel search error:", error);
+    // Re-throw all errors - no fallback to sample data
+    throw error;
+  }
+}
+
+// Main hotel search function
+async function searchHotels(searchParams) {
+  try {
+    const submitBtn = document.querySelector(
+      '#hotelSearchForm button[type="submit"]'
+    );
+    if (submitBtn) {
+      const originalBtnText = submitBtn.innerHTML;
+      submitBtn.innerHTML =
+        '<i class="fas fa-spinner fa-spin me-1"></i> Searching...';
+      submitBtn.disabled = true;
+    }
+
+    const hotels = await searchHotelsFromAmadeus(searchParams);
+
+    if (submitBtn) {
+      submitBtn.innerHTML = '<i class="fas fa-search me-2"></i>Search Hotels';
+      submitBtn.disabled = false;
+    }
+
+    return hotels;
+  } catch (error) {
+    console.error("Hotel search error:", error);
+
+    // Reset button state
+    const submitBtn = document.querySelector(
+      '#hotelSearchForm button[type="submit"]'
+    );
+    if (submitBtn) {
+      submitBtn.innerHTML = '<i class="fas fa-search me-2"></i>Search Hotels';
+      submitBtn.disabled = false;
+    }
+
+    // Show specific error message to user
+    showAlert(`Error searching for hotels: ${error.message}`, "danger");
+    throw error;
+  }
+}
+
+// Display hotel results (enhanced version)
+function displayHotelResults(hotels) {
+  const resultsContainer = document.getElementById("hotelResultsContainer");
+  const resultsList = document.getElementById("hotelResultsList");
+
+  if (!resultsContainer || !resultsList) {
+    console.error("Hotel results container not found");
+    return;
+  }
+
+  // Clear previous results
+  resultsList.innerHTML = "";
+
+  if (hotels.length === 0) {
+    resultsList.innerHTML =
+      '<div class="col-12"><div class="text-center py-4"><p class="text-muted">No hotels found. Please try different dates or location.</p></div></div>';
+    resultsContainer.style.display = "block";
+    return;
+  }
+
+  // Display hotel results
+  hotels.forEach((hotel) => {
+    const hotelElement = document.createElement("div");
+    hotelElement.className = "col-md-6 col-lg-4 mb-4";
+
+    const starsDisplay =
+      "★".repeat(Math.floor(hotel.rating)) +
+      "☆".repeat(5 - Math.floor(hotel.rating));
+
+    hotelElement.innerHTML = `
+      <div class="card h-100 hotel-card">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">${hotel.name}</h5>
+          <div class="d-flex align-items-center mb-2">
+            <div class="text-warning me-2">${starsDisplay}</div>
+            <small class="text-muted">${hotel.rating.toFixed(1)}</small>
+          </div>
+          <p class="card-text">
+            <small class="text-muted">
+              <i class="fas fa-map-marker-alt me-1"></i> ${hotel.address}
+            </small>
+          </p>
+          <div class="mb-3">
+            <small class="text-muted d-block mb-1">
+              <i class="fas fa-calendar me-1"></i> 
+              ${formatDate(hotel.checkIn)} - ${formatDate(hotel.checkOut)} 
+              (${hotel.nights} night${hotel.nights > 1 ? "s" : ""})
+            </small>
+            <small class="text-muted d-block">
+              <i class="fas fa-bed me-1"></i> ${hotel.roomType}
+            </small>
+          </div>
+          ${
+            hotel.amenities.length > 0
+              ? `
+          <ul class="list-unstyled small mb-3 flex-grow-1">
+            ${hotel.amenities
+              .slice(0, 4)
+              .map(
+                (amenity) =>
+                  `<li><i class="fas fa-check text-success me-1"></i> ${amenity}</li>`
+              )
+              .join("")}
+            ${
+              hotel.amenities.length > 4
+                ? `<li class="text-muted">+ ${
+                    hotel.amenities.length - 4
+                  } more</li>`
+                : ""
+            }
+          </ul>
+          `
+              : ""
+          }
+          <div class="mt-auto">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <div>
+                <h5 class="mb-0">${formatCurrency(hotel.pricePerNight)}</h5>
+                <small class="text-muted">per night</small>
+              </div>
+              <div class="text-end">
+                <div class="fw-bold">${formatCurrency(hotel.totalPrice)}</div>
+                <small class="text-muted">total</small>
+              </div>
+            </div>
+            <button class="btn btn-primary w-100 save-hotel-btn" 
+                    data-hotel-id="${hotel.id}"
+                    type="button">
+              <i class="far fa-save me-1"></i> Save to Trip
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    resultsList.appendChild(hotelElement);
+  });
+
+  // Show results container
+  resultsContainer.style.display = "block";
+
+  // Add event listeners using event delegation
+  resultsList.removeEventListener("click", handleSaveHotelClick);
+  resultsList.addEventListener("click", handleSaveHotelClick);
+
+  // Store hotels data for access in click handler
+  resultsList.hotelsData = hotels;
+}
+
+// Separate click handler for hotels
+function handleSaveHotelClick(event) {
+  const saveBtn = event.target.closest(".save-hotel-btn");
+  if (!saveBtn) return;
+
+  event.preventDefault();
+  event.stopPropagation();
+
+  const hotelId = saveBtn.getAttribute("data-hotel-id");
+  const hotels = event.currentTarget.hotelsData || [];
+  const hotel = hotels.find((h) => h.id === hotelId);
+
+  if (hotel) {
+    saveHotelToTrip(hotel);
+  } else {
+    showAlert("Hotel data not found", "danger");
+  }
+}
+
+// Enhanced save hotel function
+function saveHotelToTrip(hotel) {
+  initializeTripsData(); // Ensure data exists
+
+  // Get current trips data
+  const trips = JSON.parse(localStorage.getItem("trips"));
+  const tripId =
+    new URLSearchParams(window.location.search).get("id") || trips[0].id;
+
+  // Find the trip
+  const tripIndex = trips.findIndex((t) => t.id === tripId);
+  if (tripIndex === -1) {
+    showAlert("Trip not found", "danger");
+    return;
+  }
+
+  // Initialize hotels array if needed
+  if (!trips[tripIndex].hotels) {
+    trips[tripIndex].hotels = [];
+  }
+
+  // Check if hotel exists
+  const existingIndex = trips[tripIndex].hotels.findIndex(
+    (h) => h.id === hotel.id
+  );
+
+  if (existingIndex >= 0) {
+    trips[tripIndex].hotels[existingIndex] = hotel; // Update
+    showAlert("Hotel updated!", "info");
+  } else {
+    trips[tripIndex].hotels.push(hotel); // Add new
+    // Update budget for new hotels only
+    trips[tripIndex].budget.estimated.Hotels += hotel.totalPrice;
+    trips[tripIndex].budget.estimatedTotal += hotel.totalPrice;
+    showAlert("Hotel saved to trip!", "success");
+  }
+
+  // Save back to localStorage
+  localStorage.setItem("trips", JSON.stringify(trips));
+
+  // Update UI
+  updateSavedHotelsDisplay(trips[tripIndex].hotels);
+  updateBudgetDisplay(trips[tripIndex].budget);
+
+  // Update the button to show it's saved
+  const saveBtn = document.querySelector(`[data-hotel-id="${hotel.id}"]`);
+  if (saveBtn) {
+    saveBtn.innerHTML = '<i class="fas fa-check me-1"></i> Saved';
+    saveBtn.classList.remove("btn-primary");
+    saveBtn.classList.add("btn-success");
+    saveBtn.disabled = true;
+  }
+}
+
+// Helper function to update saved hotels display
+function updateSavedHotelsDisplay(hotels) {
+  const container = document.getElementById("savedHotelsContainer");
+  if (container) {
+    loadSavedHotels(hotels);
+  }
+}
+
+// Export functions for use in main application
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = {
+    searchHotels,
+    displayHotelResults,
+    saveHotelToTrip,
+    validateCityCode,
+    searchHotelsFromAmadeus,
+  };
+}
