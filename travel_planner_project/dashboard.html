@@ -16,7 +16,6 @@
     <link rel="stylesheet" href="./src/css/trip.css" />
   </head>
   <body>
-    <!-- Navigation -->
     <nav class="navbar">
       <div class="container">
         <div class="navbar-content">
@@ -31,8 +30,12 @@
               >
             </li>
             <li class="dropdown">
-              <button class="dropdown-toggle" id="navbarDropdown">
-                <i class="fas fa-user-circle me-1"></i> User Name
+              <button
+                class="dropdown-toggle"
+                id="navbarDropdown"
+                onclick="toggleDropdown()"
+              >
+                <i class="fas fa-user-circle me-1"></i> milton kumirai
               </button>
               <div class="dropdown-menu" id="dropdownMenu">
                 <a class="dropdown-item" href="#">Profile</a>
@@ -167,6 +170,23 @@
           noTripsMessage.classList.remove("d-none");
         }
       }
+
+      function toggleDropdown() {
+        const dropdownMenu = document.getElementById("dropdownMenu");
+        dropdownMenu.classList.toggle("show");
+      }
+
+      window.onclick = function (event) {
+        if (!event.target.matches(".dropdown-toggle")) {
+          const dropdowns = document.getElementsByClassName("dropdown-menu");
+          for (let i = 0; i < dropdowns.length; i++) {
+            const openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains("show")) {
+              openDropdown.classList.remove("show");
+            }
+          }
+        }
+      };
 
       function getTripStatusClass(status) {
         const statusClasses = {

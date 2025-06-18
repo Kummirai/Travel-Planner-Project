@@ -30,8 +30,12 @@
               >
             </li>
             <li class="dropdown">
-              <button class="dropdown-toggle" id="navbarDropdown">
-                <i class="fas fa-user-circle me-1"></i> User Name
+              <button
+                class="dropdown-toggle"
+                id="navbarDropdown"
+                onclick="toggleDropdown()"
+              >
+                <i class="fas fa-user-circle me-1"></i> milton kumirai
               </button>
               <div class="dropdown-menu" id="dropdownMenu">
                 <a class="dropdown-item" href="#">Profile</a>
@@ -46,7 +50,6 @@
     <!-- Main Content -->
     <main class="py-4">
       <div class="container">
-        <!-- Trip Header -->
         <div class="trip-header">
           <div class="trip-info">
             <h1 id="tripName">New Trip</h1>
@@ -572,13 +575,11 @@
     <script src="./src/js/api.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        // Existing authentication check
         if (!localStorage.getItem("currentUser")) {
           window.location.href = "auth.html?action=login";
           return;
         }
 
-        // Existing user display logic
         const currentUser = JSON.parse(localStorage.getItem("currentUser"));
         if (currentUser && currentUser.name) {
           document.querySelector(
@@ -586,7 +587,6 @@
           ).innerHTML = `<i class="fas fa-user-circle"></i> ${currentUser.name}`;
         }
 
-        // Existing logout functionality
         document
           .getElementById("logoutBtn")
           .addEventListener("click", function () {
@@ -594,10 +594,8 @@
             window.location.href = "auth.html?action=login";
           });
 
-        // Initialize custom tab system
         initTabSystem();
 
-        // Rest of your existing initialization code
         const urlParams = new URLSearchParams(window.location.search);
         const tripId = urlParams.get("id");
         const action = urlParams.get("action");
@@ -613,7 +611,6 @@
         initializeBudgetChart();
       });
 
-      // Custom Tab System Functionality
       function initTabSystem() {
         const tabLinks = document.querySelectorAll(".tab-link");
 
@@ -621,7 +618,6 @@
           link.addEventListener("click", function (e) {
             e.preventDefault();
 
-            // Remove active class from all tabs and panes
             document.querySelectorAll(".tab-link").forEach((tab) => {
               tab.classList.remove("active");
             });
@@ -629,17 +625,14 @@
               pane.classList.remove("active");
             });
 
-            // Add active class to clicked tab and corresponding pane
             this.classList.add("active");
             const tabId = this.getAttribute("data-tab");
             document.getElementById(tabId).classList.add("active");
 
-            // If you need to save the active tab state
             localStorage.setItem("lastActiveTab", tabId);
           });
         });
 
-        // Optional: Restore last active tab if needed
         const lastActiveTab = localStorage.getItem("lastActiveTab");
         if (lastActiveTab) {
           const tabToActivate = document.querySelector(
@@ -652,7 +645,6 @@
       }
 
       function showAddExpenseModal() {
-        // Create or show your modal here
         const modal = `
     <div class="modal-overlay" id="expenseModal">
       <div class="modal-content">
@@ -692,7 +684,6 @@
 
         document.body.insertAdjacentHTML("beforeend", modal);
 
-        // Handle form submission
         document
           .getElementById("expenseForm")
           .addEventListener("submit", function (e) {
@@ -700,7 +691,6 @@
             saveExpense();
           });
 
-        // Handle cancel
         document
           .getElementById("cancelExpense")
           .addEventListener("click", function () {
@@ -721,7 +711,6 @@
           return;
         }
 
-        // Get current trip
         const urlParams = new URLSearchParams(window.location.search);
         const tripId = urlParams.get("id");
         const trips = JSON.parse(localStorage.getItem("trips")) || [];
@@ -729,22 +718,17 @@
 
         if (tripIndex === -1) return;
 
-        // Update budget
         trips[tripIndex].budget.actual[category] += amount;
         trips[tripIndex].budget.actualTotal += amount;
 
-        // Save back to storage
         localStorage.setItem("trips", JSON.stringify(trips));
 
-        // Update display
         updateBudgetDisplay(trips[tripIndex].budget);
 
-        // Close modal
         document.getElementById("expenseModal").remove();
       }
 
       function initializeNewTrip() {
-        // Set default dates (today and tomorrow)
         const today = new Date();
         const tomorrow = new Date();
         tomorrow.setDate(today.getDate() + 1);
@@ -756,7 +740,6 @@
         document.getElementById("hotelCheckIn").valueAsDate = today;
         document.getElementById("hotelCheckOut").valueAsDate = tomorrow;
 
-        // Generate a new trip ID
         document.getElementById("tripNameInput").value = "My New Trip";
       }
 
@@ -770,7 +753,6 @@
           return;
         }
 
-        // Populate trip details
         document.getElementById("tripName").textContent = trip.name;
         document.getElementById("tripNameInput").value = trip.name;
         document.getElementById("tripDestination").value = trip.destination;
@@ -784,14 +766,12 @@
           trip.description || "";
         document.getElementById("tripStatus").value = trip.status || "Planning";
 
-        // Calculate and display trip dates
         const startDate = formatDate(trip.startDate);
         const endDate = formatDate(trip.endDate);
         document.getElementById(
           "tripDates"
         ).textContent = `${startDate} - ${endDate}`;
 
-        // Initialize default budget structure if none exists
         if (!trip.budget) {
           trip.budget = {
             estimatedTotal: 0,
@@ -813,7 +793,7 @@
               Other: 0,
             },
           };
-          // Save the updated trip with new budget structure
+
           const tripIndex = trips.findIndex((t) => t.id === tripId);
           if (tripIndex !== -1) {
             trips[tripIndex] = trip;
@@ -821,7 +801,6 @@
           }
         }
 
-        // Load itinerary days if they exist
         if (trip.days && trip.days.length > 0) {
           document.getElementById("noDaysMessage").classList.add("d-none");
           loadItineraryDays(trip.days);
@@ -829,7 +808,6 @@
           document.getElementById("noDaysMessage").classList.remove("d-none");
         }
 
-        // Load saved flights if they exist
         if (trip.flights && trip.flights.length > 0) {
           loadSavedFlights(trip.flights);
         } else {
@@ -837,7 +815,6 @@
             '<p class="text-muted mb-0">No flights saved yet</p>';
         }
 
-        // Load saved hotels if they exist
         if (trip.hotels && trip.hotels.length > 0) {
           loadSavedHotels(trip.hotels);
         } else {
@@ -845,10 +822,8 @@
             '<p class="text-muted mb-0">No hotels saved yet</p>';
         }
 
-        // Always load budget data (now guaranteed to exist)
         updateBudgetDisplay(trip.budget);
 
-        // Initialize budget chart and handlers
         initializeBudgetChart();
         setupBudgetHandlers();
       }
@@ -890,6 +865,23 @@
           },
         });
       }
+
+      function toggleDropdown() {
+        const dropdownMenu = document.getElementById("dropdownMenu");
+        dropdownMenu.classList.toggle("show");
+      }
+
+      window.onclick = function (event) {
+        if (!event.target.matches(".dropdown-toggle")) {
+          const dropdowns = document.getElementsByClassName("dropdown-menu");
+          for (let i = 0; i < dropdowns.length; i++) {
+            const openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains("show")) {
+              openDropdown.classList.remove("show");
+            }
+          }
+        }
+      };
 
       function updateBudgetDisplay(budgetData) {
         // Update the budget summary
