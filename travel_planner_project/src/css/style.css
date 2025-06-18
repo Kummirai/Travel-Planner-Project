@@ -67,7 +67,7 @@ header nav a:hover {
   align-items: center;
   min-height: 90vh;
   background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0)),
-    url("../public/images/hero.webp");
+    url("../../public/images/hero.webp");
   background-size: cover;
   background-position: top;
   background-repeat: no-repeat;
@@ -258,7 +258,7 @@ header nav a:hover {
       rgba(0, 0, 0, 0) 0%,
       rgba(0, 0, 0, 0) 100%
     ),
-    url("../public/images/travel.webp");
+    url("../../public/images/travel.webp");
   background-size: cover;
   background-position: top center;
   background-attachment: fixed;
@@ -643,7 +643,7 @@ input[type="submit"]:hover {
 
 form a {
   color: var(--border);
-  font-family: 'Times New Roman', Times, serif;
+  font-family: "Times New Roman", Times, serif;
   font-size: 1rem;
   padding-left: 0.3rem;
 }
