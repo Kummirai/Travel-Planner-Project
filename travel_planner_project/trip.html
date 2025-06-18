@@ -404,14 +404,20 @@
                         <label for="hotelLocation" class="form-label"
                           >Location</label
                         >
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="hotelLocation"
-                          placeholder="City or Hotel Name"
-                          required
-                        />
+                        <div class="search-input-group">
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="hotelLocation"
+                            placeholder="City or Hotel Name"
+                            required
+                          />
+                          <button type="submit" class="search-button">
+                            <i class="fas fa-search"></i> Search
+                          </button>
+                        </div>
                       </div>
+
                       <div class="row">
                         <div class="col-md-6">
                           <div class="form-group">
@@ -440,6 +446,7 @@
                           </div>
                         </div>
                       </div>
+
                       <div class="row">
                         <div class="col-md-6">
                           <div class="form-group">
@@ -449,11 +456,107 @@
                             <select class="form-select" id="hotelGuests">
                               <option value="1">1 Guest</option>
                               <option value="2">2 Guests</option>
+                              <option value="3">3 Guests</option>
+                              <option value="4">4 Guests</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="hotelRooms" class="form-label"
+                              >Rooms</label
+                            >
+                            <select class="form-select" id="hotelRooms">
+                              <option value="1">1 Room</option>
+                              <option value="2">2 Rooms</option>
                             </select>
                           </div>
                         </div>
                       </div>
                     </form>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="saved-hotels-container">
+                      <h6>Saved Hotels</h6>
+                      <div id="savedHotelsContainer">
+                        <p class="no-hotels-message">No hotels saved yet</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="hotel-results-container"
+                  id="hotelResultsContainer"
+                  style="display: none"
+                >
+                  <h6 class="results-title">Hotel Results</h6>
+                  <div class="row" id="hotelResultsList">
+                    <!-- Hotel results will be inserted here -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--Budget Tab-->
+          <div id="budget" class="tab-pane">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Budget Overview</h5>
+                    <div class="budget-summary">
+                      <div class="d-flex justify-content-between mb-2">
+                        <span>Estimated Budget</span>
+                        <strong id="estimatedBudget">$0.00</strong>
+                      </div>
+                      <div class="d-flex justify-content-between mb-2">
+                        <span>Actual Expenses</span>
+                        <strong id="actualExpenses">$0.00</strong>
+                      </div>
+                      <div class="d-flex justify-content-between mb-2">
+                        <span>Remaining</span>
+                        <strong id="remainingBudget">$0.00</strong>
+                      </div>
+                      <div class="progress mt-3">
+                        <div
+                          class="progress-bar"
+                          id="budgetProgressBar"
+                          style="width: 0%"
+                        ></div>
+                      </div>
+                    </div>
+                    <canvas id="budgetChart" height="200"></canvas>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="card">
+                  <div class="card-body">
+                    <div
+                      class="d-flex justify-content-between align-items-center mb-3"
+                    >
+                      <h5 class="card-title">Expense Categories</h5>
+                      <button class="btn btn-sm btn-primary" id="addExpenseBtn">
+                        <i class="fas fa-plus"></i> Add Expense
+                      </button>
+                    </div>
+                    <div class="table-responsive">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th>Category</th>
+                            <th class="text-end">Estimated</th>
+                            <th class="text-end">Actual</th>
+                          </tr>
+                        </thead>
+                        <tbody id="expenseTableBody">
+                          <!-- Will be populated by JavaScript -->
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -548,6 +651,98 @@
         }
       }
 
+      function showAddExpenseModal() {
+        // Create or show your modal here
+        const modal = `
+    <div class="modal-overlay" id="expenseModal">
+      <div class="modal-content">
+        <h3>Add New Expense</h3>
+        <form id="expenseForm">
+          <div class="form-group">
+            <label>Category</label>
+            <select class="form-control" id="expenseCategory">
+              <option value="Flights">Flights</option>
+              <option value="Hotels">Hotels</option>
+              <option value="Food">Food</option>
+              <option value="Activities">Activities</option>
+              <option value="Transportation">Transportation</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Amount</label>
+            <input type="number" class="form-control" id="expenseAmount" step="0.01" min="0">
+          </div>
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date" class="form-control" id="expenseDate">
+          </div>
+          <div class="form-group">
+            <label>Description (Optional)</label>
+            <input type="text" class="form-control" id="expenseDescription">
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" id="cancelExpense">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Expense</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  `;
+
+        document.body.insertAdjacentHTML("beforeend", modal);
+
+        // Handle form submission
+        document
+          .getElementById("expenseForm")
+          .addEventListener("submit", function (e) {
+            e.preventDefault();
+            saveExpense();
+          });
+
+        // Handle cancel
+        document
+          .getElementById("cancelExpense")
+          .addEventListener("click", function () {
+            document.getElementById("expenseModal").remove();
+          });
+      }
+
+      function saveExpense() {
+        const category = document.getElementById("expenseCategory").value;
+        const amount = parseFloat(
+          document.getElementById("expenseAmount").value
+        );
+        const date = document.getElementById("expenseDate").value;
+        const description = document.getElementById("expenseDescription").value;
+
+        if (!category || isNaN(amount) || !date) {
+          alert("Please fill in all required fields");
+          return;
+        }
+
+        // Get current trip
+        const urlParams = new URLSearchParams(window.location.search);
+        const tripId = urlParams.get("id");
+        const trips = JSON.parse(localStorage.getItem("trips")) || [];
+        const tripIndex = trips.findIndex((t) => t.id === tripId);
+
+        if (tripIndex === -1) return;
+
+        // Update budget
+        trips[tripIndex].budget.actual[category] += amount;
+        trips[tripIndex].budget.actualTotal += amount;
+
+        // Save back to storage
+        localStorage.setItem("trips", JSON.stringify(trips));
+
+        // Update display
+        updateBudgetDisplay(trips[tripIndex].budget);
+
+        // Close modal
+        document.getElementById("expenseModal").remove();
+      }
+
       function initializeNewTrip() {
         // Set default dates (today and tomorrow)
         const today = new Date();
@@ -596,26 +791,66 @@
           "tripDates"
         ).textContent = `${startDate} - ${endDate}`;
 
+        // Initialize default budget structure if none exists
+        if (!trip.budget) {
+          trip.budget = {
+            estimatedTotal: 0,
+            actualTotal: 0,
+            estimated: {
+              Flights: 0,
+              Hotels: 0,
+              Food: 0,
+              Activities: 0,
+              Transportation: 0,
+              Other: 0,
+            },
+            actual: {
+              Flights: 0,
+              Hotels: 0,
+              Food: 0,
+              Activities: 0,
+              Transportation: 0,
+              Other: 0,
+            },
+          };
+          // Save the updated trip with new budget structure
+          const tripIndex = trips.findIndex((t) => t.id === tripId);
+          if (tripIndex !== -1) {
+            trips[tripIndex] = trip;
+            localStorage.setItem("trips", JSON.stringify(trips));
+          }
+        }
+
         // Load itinerary days if they exist
         if (trip.days && trip.days.length > 0) {
           document.getElementById("noDaysMessage").classList.add("d-none");
           loadItineraryDays(trip.days);
+        } else {
+          document.getElementById("noDaysMessage").classList.remove("d-none");
         }
 
         // Load saved flights if they exist
         if (trip.flights && trip.flights.length > 0) {
           loadSavedFlights(trip.flights);
+        } else {
+          document.getElementById("savedFlightsContainer").innerHTML =
+            '<p class="text-muted mb-0">No flights saved yet</p>';
         }
 
         // Load saved hotels if they exist
         if (trip.hotels && trip.hotels.length > 0) {
           loadSavedHotels(trip.hotels);
+        } else {
+          document.getElementById("savedHotelsContainer").innerHTML =
+            '<p class="text-muted mb-0">No hotels saved yet</p>';
         }
 
-        // Load budget data if it exists
-        if (trip.budget) {
-          updateBudgetDisplay(trip.budget);
-        }
+        // Always load budget data (now guaranteed to exist)
+        updateBudgetDisplay(trip.budget);
+
+        // Initialize budget chart and handlers
+        initializeBudgetChart();
+        setupBudgetHandlers();
       }
 
       function initializeBudgetChart() {

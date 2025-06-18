@@ -747,3 +747,116 @@ canvas {
 .tab-pane.active {
   display: block;
 }
+
+/* Budget Tab Specific Styles */
+.budget-summary {
+  margin-bottom: 20px;
+}
+
+.progress {
+  height: 10px;
+  background-color: #e9ecef;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  background-color: #198754;
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.table th {
+  font-weight: 600;
+}
+
+.text-end {
+  text-align: right;
+}
+
+/* Hotel Search Styles */
+.search-input-group {
+  position: relative;
+  display: flex;
+}
+
+.search-input-group .form-control {
+  padding-right: 100px; /* Space for button */
+  flex-grow: 1;
+}
+
+.search-button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  padding: 0 15px;
+  background: #0d6efd;
+  color: white;
+  border: none;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.search-button:hover {
+  background: #0b5ed7;
+}
+
+/* Saved Hotels Section */
+.saved-hotels-container {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 15px;
+  height: 100%;
+}
+
+.saved-hotels-container h6 {
+  margin-bottom: 15px;
+  color: #495057;
+}
+
+.no-hotels-message {
+  color: #6c757d;
+  margin: 0;
+}
+
+/* Results Section */
+.hotel-results-container {
+  margin-top: 30px;
+}
+
+.results-title {
+  margin-bottom: 15px;
+  color: #495057;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .search-button {
+    position: relative;
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 4px;
+  }
+
+  .search-input-group {
+    flex-direction: column;
+  }
+
+  .search-input-group .form-control {
+    padding-right: 15px;
+  }
+}
