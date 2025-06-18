@@ -91,6 +91,12 @@ a:hover {
   list-style: none;
 }
 
+#navbarNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .nav-item {
   margin: 0 10px;
 }
