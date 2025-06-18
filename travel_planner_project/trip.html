@@ -468,5 +468,203 @@
     <script src="./src/js/trip.js"></script>
     <script src="./src/js/itinerary.js"></script>
     <script src="./src/js/api.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        if (!localStorage.getItem("currentUser")) {
+          window.location.href = "auth.html?action=login";
+          return;
+        }
+
+        const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        if (currentUser && currentUser.name) {
+          document.querySelector(
+            ".dropdown-toggle"
+          ).innerHTML = `<i class="fas fa-user-circle me-1"></i> ${currentUser.name}`;
+        }
+
+        document
+          .getElementById("logoutBtn")
+          .addEventListener("click", function () {
+            localStorage.removeItem("currentUser");
+            window.location.href = "auth.html?action=login";
+          });
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const tripId = urlParams.get("id");
+        const action = urlParams.get("action");
+
+        if (action === "new") {
+          initializeNewTrip();
+        } else if (tripId) {
+          loadTrip(tripId);
+        } else {
+          window.location.href = "dashboard.html";
+        }
+
+        initializeBudgetChart();
+      });
+
+      function initializeNewTrip() {
+        const today = new Date();
+        const tomorrow = new Date();
+        tomorrow.setDate(today.getDate() + 1);
+
+        document.getElementById("tripStartDate").valueAsDate = today;
+        document.getElementById("tripEndDate").valueAsDate = tomorrow;
+        document.getElementById("flightDepartureDate").valueAsDate = today;
+        document.getElementById("flightReturnDate").valueAsDate = tomorrow;
+        document.getElementById("hotelCheckIn").valueAsDate = today;
+        document.getElementById("hotelCheckOut").valueAsDate = tomorrow;
+
+        document.getElementById("tripNameInput").value = "My New Trip";
+      }
+
+      function loadTrip(tripId) {
+        const trips = JSON.parse(localStorage.getItem("trips")) || [];
+        const trip = trips.find((t) => t.id === tripId);
+
+        if (!trip) {
+          alert("Trip not found");
+          window.location.href = "dashboard.html";
+          return;
+        }
+
+        document.getElementById("tripName").textContent = trip.name;
+        document.getElementById("tripNameInput").value = trip.name;
+        document.getElementById("tripDestination").value = trip.destination;
+        document.getElementById("tripStartDate").valueAsDate = new Date(
+          trip.startDate
+        );
+        document.getElementById("tripEndDate").valueAsDate = new Date(
+          trip.endDate
+        );
+        document.getElementById("tripDescription").value =
+          trip.description || "";
+        document.getElementById("tripStatus").value = trip.status || "Planning";
+
+        const startDate = formatDate(trip.startDate);
+        const endDate = formatDate(trip.endDate);
+        document.getElementById(
+          "tripDates"
+        ).textContent = `${startDate} - ${endDate}`;
+
+        if (trip.days && trip.days.length > 0) {
+          document.getElementById("noDaysMessage").classList.add("d-none");
+          loadItineraryDays(trip.days);
+        }
+
+        if (trip.flights && trip.flights.length > 0) {
+          loadSavedFlights(trip.flights);
+        }
+
+        if (trip.hotels && trip.hotels.length > 0) {
+          loadSavedHotels(trip.hotels);
+        }
+
+        if (trip.budget) {
+          updateBudgetDisplay(trip.budget);
+        }
+      }
+
+      function initializeBudgetChart() {
+        const ctx = document.getElementById("budgetChart").getContext("2d");
+        const budgetChart = new Chart(ctx, {
+          type: "doughnut",
+          data: {
+            labels: [
+              "Flights",
+              "Hotels",
+              "Food",
+              "Activities",
+              "Transportation",
+              "Other",
+            ],
+            datasets: [
+              {
+                data: [0, 0, 0, 0, 0, 0],
+                backgroundColor: [
+                  "#4FC3F7",
+                  "#FF7043",
+                  "#66BB6A",
+                  "#FFEE58",
+                  "#26A69A",
+                  "#BDBDBD",
+                ],
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: "right",
+              },
+            },
+          },
+        });
+      }
+
+      function updateBudgetDisplay(budgetData) {
+        document.getElementById(
+          "estimatedBudget"
+        ).textContent = `$${budgetData.estimatedTotal.toFixed(2)}`;
+        document.getElementById(
+          "actualExpenses"
+        ).textContent = `$${budgetData.actualTotal.toFixed(2)}`;
+
+        const remaining = budgetData.estimatedTotal - budgetData.actualTotal;
+        document.getElementById(
+          "remainingBudget"
+        ).textContent = `$${remaining.toFixed(2)}`;
+
+        const progressPercentage =
+          (budgetData.actualTotal / budgetData.estimatedTotal) * 100;
+        document.getElementById("budgetProgressBar").style.width = `${Math.min(
+          progressPercentage,
+          100
+        )}%`;
+
+        const categories = [
+          "Flights",
+          "Hotels",
+          "Food",
+          "Activities",
+          "Transportation",
+          "Other",
+        ];
+        const tableBody = document.getElementById("expenseTableBody");
+        tableBody.innerHTML = "";
+
+        categories.forEach((category) => {
+          const estimated = budgetData.estimated[category] || 0;
+          const actual = budgetData.actual[category] || 0;
+
+          const row = document.createElement("tr");
+          row.innerHTML = `
+                    <td>${category}</td>
+                    <td class="text-end">$${estimated.toFixed(2)}</td>
+                    <td class="text-end">$${actual.toFixed(2)}</td>
+                `;
+          tableBody.appendChild(row);
+        });
+
+        updateBudgetChart([
+          budgetData.actual.Flights || 0,
+          budgetData.actual.Hotels || 0,
+          budgetData.actual.Food || 0,
+          budgetData.actual.Activities || 0,
+          budgetData.actual.Transportation || 0,
+          budgetData.actual.Other || 0,
+        ]);
+      }
+
+      function updateBudgetChart(data) {
+        const chart = Chart.getChart("budgetChart");
+        if (chart) {
+          chart.data.datasets[0].data = data;
+          chart.update();
+        }
+      }
+    </script>
   </body>
 </html>
