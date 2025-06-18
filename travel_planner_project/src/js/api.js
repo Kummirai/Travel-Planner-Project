@@ -1,7 +1,8 @@
+// Utility Functions
 function formatDateForAPI(dateString) {
   if (!dateString) return "";
   const date = new Date(dateString);
-  return date.toISOString().split("T")[0];
+  return date.toISOString().split("T")[0]; // Returns YYYY-MM-DD
 }
 
 function formatDate(dateString) {
@@ -10,11 +11,36 @@ function formatDate(dateString) {
   return new Date(dateString).toLocaleDateString(undefined, options);
 }
 
-function formatCurrency(amount, currency = "USD") {
-  return new Intl.NumberFormat(undefined, {
+const EXCHANGE_RATES = {
+  USD: 18.5,
+  EUR: 20.1,
+  GBP: 23.5,
+  ZAR: 1.0,
+};
+
+// Convert any currency to ZAR
+function convertToZAR(amount, fromCurrency) {
+  const rate = EXCHANGE_RATES[fromCurrency.toUpperCase()];
+  if (!rate) {
+    console.warn(
+      `Exchange rate not found for ${fromCurrency}, using 1:1 ratio`
+    );
+    return amount;
+  }
+  return amount * rate;
+}
+
+function formatCurrency(amount, currency = "ZAR") {
+  // Always convert to ZAR first
+  const zarAmount =
+    currency.toUpperCase() === "ZAR" ? amount : convertToZAR(amount, currency);
+
+  return new Intl.NumberFormat("en-ZA", {
     style: "currency",
-    currency: currency,
-  }).format(amount);
+    currency: "ZAR",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(zarAmount);
 }
 
 function generateId() {
@@ -35,6 +61,7 @@ function showAlert(message, type = "info") {
   setTimeout(() => alertDiv.remove(), 5000);
 }
 
+// Airport code validation helper
 function validateAirportCode(code) {
   // Common airport code mappings for your region
   const airportMappings = {
@@ -288,6 +315,10 @@ async function fetchFlightsFromAmadeus(params) {
       const flight = offer.itineraries[0].segments[0];
       const pricing = offer.price;
 
+      // Convert price to ZAR
+      const originalPrice = parseFloat(pricing.total);
+      const zarPrice = convertToZAR(originalPrice, pricing.currency);
+
       return {
         id: offer.id,
         airline: flight.carrierCode,
@@ -303,8 +334,10 @@ async function fetchFlightsFromAmadeus(params) {
           date: flight.arrival.at.split("T")[0],
         },
         duration: formatDuration(offer.itineraries[0].duration),
-        price: parseFloat(pricing.total),
-        currency: pricing.currency,
+        price: zarPrice,
+        originalPrice: originalPrice,
+        originalCurrency: pricing.currency,
+        currency: "ZAR",
         stops: offer.itineraries[0].segments.length - 1,
       };
     });
@@ -544,7 +577,7 @@ function displayFlightResults(flights) {
     return;
   }
 
-  //Display flight Results
+  // Add new results
   flights.forEach((flight) => {
     const flightElement = document.createElement("a");
     flightElement.href = "#";
@@ -593,6 +626,7 @@ function displayFlightResults(flights) {
     resultsList.appendChild(flightElement);
   });
 
+  // Show results container
   resultsContainer.style.display = "block";
 
   // Add event listeners to save buttons
