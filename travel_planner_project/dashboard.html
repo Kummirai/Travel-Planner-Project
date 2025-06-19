@@ -20,28 +20,40 @@
     <nav class="navbar">
       <div class="container">
         <div class="navbar-content">
-          <a class="navbar-brand" href="index.html">
-            <i class="fas fa-plane-departure me-2"></i>Travel Planner
-          </a>
-          <ul class="navbar-nav">
-            <li><a class="nav-link" href="dashboard.html">Dashboard</a></li>
-            <li>
-              <a class="nav-link" href="trip.html?action=new">New Trip</a>
-            </li>
-            <li class="dropdown">
-              <button
-                class="dropdown-toggle"
-                id="navbarDropdown"
-                onclick="toggleDropdown()"
-              >
-                <i class="fas fa-user-circle me-1"></i> milton kumirai
-              </button>
-              <div class="dropdown-menu" id="dropdownMenu">
-                <a class="dropdown-item" href="#">Profile</a>
-                <a class="dropdown-item" href="#" id="logoutBtn">Logout</a>
-              </div>
-            </li>
-          </ul>
+          <div class="navbar-header">
+            <a class="navbar-brand" href="index.html">
+              <i class="fas fa-plane-departure me-2"></i>Travel Planner
+            </a>
+            <button
+              class="navbar-toggler"
+              id="navbarToggler"
+              aria-label="Toggle navigation"
+            >
+              <i class="fas fa-bars"></i>
+            </button>
+          </div>
+
+          <div class="navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav">
+              <li><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+              <li>
+                <a class="nav-link" href="trip.html?action=new">New Trip</a>
+              </li>
+              <li class="dropdown">
+                <button
+                  class="dropdown-toggle"
+                  id="navbarDropdown"
+                  onclick="toggleDropdown()"
+                >
+                  <i class="fas fa-user-circle me-1"></i> milton kumirai
+                </button>
+                <div class="dropdown-menu" id="dropdownMenu">
+                  <a class="dropdown-item" href="#">Profile</a>
+                  <a class="dropdown-item" href="#" id="logoutBtn">Logout</a>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </nav>
