@@ -439,21 +439,22 @@ window.onclick = function (event) {
 
 function updateBudgetDisplay(budgetData) {
   // Update the budget summary
-  document.getElementById(
-    "estimatedBudget"
-  ).textContent = `$${budgetData.estimatedTotal.toFixed(2)}`;
-  document.getElementById(
-    "actualExpenses"
-  ).textContent = `$${budgetData.actualTotal.toFixed(2)}`;
+  document.getElementById("estimatedBudget").textContent = formatCurrency(
+    budgetData.estimatedTotal
+  );
+  document.getElementById("actualExpenses").textContent = formatCurrency(
+    budgetData.actualTotal
+  );
 
   const remaining = budgetData.estimatedTotal - budgetData.actualTotal;
-  document.getElementById(
-    "remainingBudget"
-  ).textContent = `$${remaining.toFixed(2)}`;
+  document.getElementById("remainingBudget").textContent =
+    formatCurrency(remaining);
 
   // Update progress bar
   const progressPercentage =
-    (budgetData.actualTotal / budgetData.estimatedTotal) * 100;
+    budgetData.estimatedTotal > 0
+      ? (budgetData.actualTotal / budgetData.estimatedTotal) * 100
+      : 0;
   document.getElementById("budgetProgressBar").style.width = `${Math.min(
     progressPercentage,
     100
@@ -477,10 +478,10 @@ function updateBudgetDisplay(budgetData) {
 
     const row = document.createElement("tr");
     row.innerHTML = `
-                    <td>${category}</td>
-                    <td class="text-end">$${estimated.toFixed(2)}</td>
-                    <td class="text-end">$${actual.toFixed(2)}</td>
-                `;
+      <td>${category}</td>
+      <td class="text-end">${formatCurrency(estimated)}</td>
+      <td class="text-end">${formatCurrency(actual)}</td>
+    `;
     tableBody.appendChild(row);
   });
 
@@ -582,4 +583,130 @@ function initializeBudgetChart() {
   budgetChart = new Chart(ctx, {
     // your chart configuration
   });
+}
+
+function showAddExpenseModal() {
+  // Check if modal already exists
+  if (document.getElementById("expenseModal")) {
+    document.getElementById("expenseModal").style.display = "flex";
+    return;
+  }
+
+  const modal = document.createElement("div");
+  modal.className = "modal-overlay";
+  modal.id = "expenseModal";
+  modal.innerHTML = `
+    <div class="modal-content">
+      <h3>Add New Expense</h3>
+      <form id="expenseForm">
+        <div class="form-group">
+          <label>Category</label>
+          <select class="form-control" id="expenseCategory" required>
+            <option value="">Select a category</option>
+            <option value="Flights">Flights</option>
+            <option value="Hotels">Hotels</option>
+            <option value="Food">Food</option>
+            <option value="Activities">Activities</option>
+            <option value="Transportation">Transportation</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Amount (ZAR)</label>
+          <input type="number" class="form-control" id="expenseAmount" step="0.01" min="0" required>
+        </div>
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" class="form-control" id="expenseDate" required>
+        </div>
+        <div class="form-group">
+          <label>Description (Optional)</label>
+          <input type="text" class="form-control" id="expenseDescription">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="cancelExpense">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Expense</button>
+        </div>
+      </form>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  // Set default date to today
+  document.getElementById("expenseDate").valueAsDate = new Date();
+
+  // Form submission handler
+  document
+    .getElementById("expenseForm")
+    .addEventListener("submit", function (e) {
+      e.preventDefault();
+      saveExpense();
+    });
+
+  // Cancel button handler
+  document
+    .getElementById("cancelExpense")
+    .addEventListener("click", function () {
+      modal.style.display = "none";
+    });
+
+  // Show the modal
+  modal.style.display = "flex";
+}
+
+function saveExpense() {
+  const category = document.getElementById("expenseCategory").value;
+  const amount = parseFloat(document.getElementById("expenseAmount").value);
+  const date = document.getElementById("expenseDate").value;
+  const description = document.getElementById("expenseDescription").value;
+
+  if (!category || isNaN(amount) || !date) {
+    showAlert("Please fill in all required fields", "danger");
+    return;
+  }
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const tripId = urlParams.get("id");
+  const trips = JSON.parse(localStorage.getItem("trips")) || [];
+  const tripIndex = trips.findIndex((t) => t.id === tripId);
+
+  if (tripIndex === -1) {
+    showAlert("Trip not found", "danger");
+    return;
+  }
+
+  // Create expense object
+  const expense = {
+    id: generateId(),
+    category,
+    amount,
+    date,
+    description: description || "",
+    createdAt: new Date().toISOString(),
+  };
+
+  // Initialize expenses array if it doesn't exist
+  if (!trips[tripIndex].expenses) {
+    trips[tripIndex].expenses = [];
+  }
+
+  // Add the expense
+  trips[tripIndex].expenses.push(expense);
+
+  // Update budget
+  trips[tripIndex].budget.actual[category] += amount;
+  trips[tripIndex].budget.actualTotal += amount;
+
+  // Save to localStorage
+  localStorage.setItem("trips", JSON.stringify(trips));
+
+  // Update UI
+  updateBudgetDisplay(trips[tripIndex].budget);
+
+  // Close modal
+  document.getElementById("expenseModal").style.display = "none";
+
+  // Show success message
+  showAlert("Expense added successfully!", "success");
 }
