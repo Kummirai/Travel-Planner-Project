@@ -326,7 +326,7 @@ async function fetchFlightsFromAmadeus(params) {
     });
 
     const data = await handleApiResponse(response, url.toString());
-
+    console.log(data);
     if (!data.data || data.data.length === 0) {
       showAlert(
         `No flights found from ${validOrigin} to ${validDestination} on ${params.departureDate}`,

@@ -266,6 +266,8 @@ async function getAmadeusTokenForHotels() {
     }
 
     const data = await response.json();
+    console.log(data);
+
     amadeusAccessToken = data.access_token;
     tokenExpiration = new Date(Date.now() + (data.expires_in - 300) * 1000);
     return amadeusAccessToken;
@@ -528,70 +530,74 @@ function displayHotelResults(hotels) {
       "☆".repeat(5 - Math.floor(hotel.rating));
 
     hotelElement.innerHTML = `
-      <div class="card h-100 hotel-card">
-        <div class="card-body d-flex flex-column">
-          <h2 class="card-title">${hotel.name}</h2>
-          <div class="d-flex align-items-center mb-2">
-            <div class="text-warning me-2">${starsDisplay}</div>
-            <small class="text-muted">${hotel.rating.toFixed(1)}</small>
-          </div>
-          <p class="card-text">
-            <small class="text-muted">
-              <i class="fas fa-map-marker-alt me-1"></i> ${hotel.address}
-            </small>
-          </p>
-          <div class="mb-3">
-            <small class="text-muted d-block mb-1">
-              <i class="fas fa-calendar me-1"></i> 
-              ${formatDate(hotel.checkIn)} - ${formatDate(hotel.checkOut)} 
-              (${hotel.nights} night${hotel.nights > 1 ? "s" : ""})
-            </small>
-            <small class="text-muted d-block">
-              <i class="fas fa-bed me-1"></i> ${hotel.roomType}
-            </small>
-          </div>
-          ${
-            hotel.amenities.length > 0
-              ? `
-          <ul class="list-unstyled small mb-3 flex-grow-1">
-            ${hotel.amenities
-              .slice(0, 4)
-              .map(
-                (amenity) =>
-                  `<li><i class="fas fa-check text-success me-1"></i> ${amenity}</li>`
-              )
-              .join("")}
-            ${
-              hotel.amenities.length > 4
-                ? `<li class="text-muted">+ ${
-                    hotel.amenities.length - 4
-                  } more</li>`
-                : ""
-            }
-          </ul>
-          `
-              : ""
-          }
-          <div class="mt-auto">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <div>
-                <h2 class="mb-0">${formatCurrency(hotel.pricePerNight)}</h2>
-                <small class="text-muted">per night</small>
-              </div>
-              <div class="text-end">
-                <div class="fw-bold">${formatCurrency(hotel.totalPrice)}</div>
-                <small class="text-muted">total</small>
-              </div>
-            </div>
-            <button class="btn btn-primary w-100 save-hotel-btn" 
-                    data-hotel-id="${hotel.id}"
-                    type="button">
-              <i class="far fa-save me-1"></i> Save to Trip
-            </button>
-          </div>
-        </div>
+
+    <div class="hotel-card">
+  <div class="hotel-card-body">
+    <h2 class="hotel-name">${hotel.name}</h2>
+    
+    <div class="rating-container">
+      <div class="star-rating">${starsDisplay}</div>
+      <small class="rating-value">${hotel.rating.toFixed(1)}</small>
+    </div>
+    
+    <p class="hotel-address">
+      <span class="address-icon"></span> ${hotel.address}
+    </p>
+    
+    <div class="date-room-container">
+      <div class="date-info">
+        <span class="date-icon"></span> 
+        ${formatDate(hotel.checkIn)} - ${formatDate(hotel.checkOut)} 
+        (${hotel.nights} night${hotel.nights > 1 ? "s" : ""})
       </div>
-    `;
+      <div class="room-info">
+        <span class="room-icon">🛏️</span> ${hotel.roomType}
+      </div>
+    </div>
+    
+    ${
+      hotel.amenities.length > 0
+        ? `
+    <ul class="amenities-list">
+      ${hotel.amenities
+        .slice(0, 4)
+        .map(
+          (amenity) =>
+            `<li><span class="amenity-check">✓</span> ${amenity}</li>`
+        )
+        .join("")}
+      ${
+        hotel.amenities.length > 4
+          ? `<li class="more-amenities">+ ${
+              hotel.amenities.length - 4
+            } more</li>`
+          : ""
+      }
+    </ul>
+    `
+        : ""
+    }
+    
+    <div class="pricing-container">
+      <div class="price-section">
+        <div class="price-per-night">${formatCurrency(
+          hotel.pricePerNight
+        )}</div>
+        <small class="price-label">per night</small>
+      </div>
+      <div class="total-section">
+        <div class="total-price">${formatCurrency(hotel.totalPrice)}</div>
+        <small class="price-label">total</small>
+      </div>
+    </div>
+    
+    <button class="save-button save-hotel-btn" 
+                    data-hotel-id="${hotel.id}"" data-hotel-id="${hotel.id}">
+      <span class="save-icon"></span> Save to Trip
+    </button>
+  </div>
+</div>
+      `;
 
     resultsList.appendChild(hotelElement);
   });
