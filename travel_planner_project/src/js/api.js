@@ -418,6 +418,7 @@ function initializeTripsData() {
 }
 
 // Fixed saveFlightToTrip function
+// In api.js, enhance the saveFlightToTrip function:
 function saveFlightToTrip(flight) {
   initializeTripsData(); // Ensure data exists
 
@@ -444,10 +445,18 @@ function saveFlightToTrip(flight) {
   );
 
   if (existingIndex >= 0) {
-    trips[tripIndex].flights[existingIndex] = flight; // Update
+    // Update existing flight
+    const oldPrice = trips[tripIndex].flights[existingIndex].price;
+    trips[tripIndex].flights[existingIndex] = flight;
+
+    // Adjust budget
+    trips[tripIndex].budget.estimated.Flights += flight.price - oldPrice;
+    trips[tripIndex].budget.estimatedTotal += flight.price - oldPrice;
   } else {
-    trips[tripIndex].flights.push(flight); // Add new
-    // Update budget for new flights only
+    // Add new flight
+    trips[tripIndex].flights.push(flight);
+
+    // Update budget
     trips[tripIndex].budget.estimated.Flights += flight.price;
     trips[tripIndex].budget.estimatedTotal += flight.price;
   }
@@ -462,8 +471,10 @@ function saveFlightToTrip(flight) {
     existingIndex >= 0 ? "Flight updated!" : "Flight saved!",
     "success"
   );
-}
 
+  // Update trip progress
+  updateTripProgress(tripId);
+}
 // Main flight search function
 async function searchFlights(searchParams) {
   const formattedDepartureDate = formatDateForAPI(searchParams.departureDate);
