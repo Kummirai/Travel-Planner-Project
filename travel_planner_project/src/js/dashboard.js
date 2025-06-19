@@ -151,14 +151,12 @@ function calculateTripProgress(trip) {
 
   // Calculate progress based on completed items
   let completedItems = 0;
-  const totalItems = 6; // Adjust based on your criteria
+  const totalItems = 6;
 
   if (trip.flights.length > 0) completedItems++;
   if (trip.hotels.length > 0) completedItems++;
   if (trip.days && trip.days.length > 0) completedItems++;
   if (trip.budget && trip.budget.estimatedTotal > 0) completedItems++;
-
-  // Additional criteria can be added here
 
   return Math.round((completedItems / totalItems) * 100);
 }

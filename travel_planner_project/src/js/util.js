@@ -1,4 +1,4 @@
-// Format date as MM/DD/YYYY
+
 function formatDate(dateString) {
   const date = new Date(dateString);
   return date.toLocaleDateString("en-US", {
@@ -18,7 +18,7 @@ function getDaysBetweenDates(startDate, endDate) {
   const start = new Date(startDate);
   const end = new Date(endDate);
   const diffTime = Math.abs(end - start);
-  return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // Inclusive of both dates
+  return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
 }
 
 // Format currency

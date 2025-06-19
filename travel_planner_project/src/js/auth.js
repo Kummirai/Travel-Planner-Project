@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Initialize forms
   const loginForm = document.getElementById("loginForm");
   const registerForm = document.getElementById("registerForm");
 

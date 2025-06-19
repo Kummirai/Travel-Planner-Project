@@ -1,4 +1,4 @@
-// Amadeus Hotel API Configuration
+
 const AMADEUS_HOTEL_CONFIG = {
   baseUrl: "https://test.api.amadeus.com/v3",
   searchUrl: "https://test.api.amadeus.com/v3/shopping/hotel-offers",
@@ -227,7 +227,7 @@ function validateCityCode(cityName) {
     return CITY_CODE_MAPPINGS[upperCity];
   }
 
-  // If it's already a 3-letter code, validate it exists in our mappings
+
   if (/^[A-Z]{3}$/.test(upperCity)) {
     const isValidCode = Object.values(CITY_CODE_MAPPINGS).includes(upperCity);
     return isValidCode ? upperCity : null;
@@ -312,7 +312,7 @@ function formatAmenities(amenities) {
 
 // Generate hotel placeholder image URL that actually works
 function getHotelImageUrl(hotelName, location) {
-  // Use a working placeholder service with proper encoding
+  
   const text = encodeURIComponent(`${hotelName}`);
   return `https://images.unsplash.com/photo-1566073771259-6a8506099945?w=300&h=200&fit=crop&crop=entropy&auto=format&q=60&txt=${text}`;
 }
@@ -423,7 +423,7 @@ async function searchHotelsFromAmadeus(params) {
     return offersData.data
       .map((offer) => {
         const hotel = offer.hotel;
-        const roomOffer = offer.offers[0]; // Take first offer
+        const roomOffer = offer.offers[0];
         const price = roomOffer.price;
 
         // Convert price to ZAR if needed
@@ -445,7 +445,7 @@ async function searchHotelsFromAmadeus(params) {
           currency: "ZAR",
           originalPrice: parseFloat(price.total),
           originalCurrency: price.currency,
-          rating: hotel.rating || Math.random() * 2 + 3, // Random rating 3-5 if not available
+          rating: hotel.rating || Math.random() * 2 + 3, 
           amenities: formatAmenities(hotel.amenities),
           roomType: roomOffer.room?.type?.description || "Standard Room",
           boardType: roomOffer.boardType || "ROOM_ONLY",
@@ -455,7 +455,7 @@ async function searchHotelsFromAmadeus(params) {
           address: hotel.address || `${params.location} City Center`,
         };
       })
-      .sort((a, b) => a.pricePerNight - b.pricePerNight); // Sort by price
+      .sort((a, b) => a.pricePerNight - b.pricePerNight); 
   } catch (error) {
     console.error("Amadeus hotel search error:", error);
     // Re-throw all errors - no fallback to sample data
@@ -602,8 +602,7 @@ function displayHotelResults(hotels) {
   // Show results container
   resultsContainer.style.display = "block";
 
-  // Add event listeners using event delegation
-  // Remove existing listener to prevent duplicates before adding a new one
+ 
   resultsList.removeEventListener("click", handleSaveHotelClick);
   resultsList.addEventListener("click", handleSaveHotelClick);
 
@@ -611,7 +610,6 @@ function displayHotelResults(hotels) {
   resultsList.hotelsData = hotels;
 }
 
-// Separate click handler for hotels
 function handleSaveHotelClick(event) {
   const saveBtn = event.target.closest(".save-hotel-btn");
   if (!saveBtn) return;
@@ -660,8 +658,7 @@ function saveHotelToTrip(hotel) {
     trips[tripIndex].hotels[existingIndex] = hotel; // Update
     showAlert("Hotel updated!", "info");
   } else {
-    trips[tripIndex].hotels.push(hotel); // Add new
-    // Update budget for new hotels only
+    trips[tripIndex].hotels.push(hotel); 
     trips[tripIndex].budget.estimated.Hotels += hotel.totalPrice;
     trips[tripIndex].budget.estimatedTotal += hotel.totalPrice;
     showAlert("Hotel saved to trip!", "success");
@@ -744,7 +741,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (hotelSearchForm) {
     hotelSearchForm.addEventListener("submit", async function (e) {
-      e.preventDefault(); // This must be first thing in the handler
+      e.preventDefault(); 
       console.log("Hotel search form submit event fired!");
 
       const location = document.getElementById("hotelLocation").value.trim();
