@@ -116,6 +116,18 @@
                           required
                         />
                       </div>
+                      <div class="form-group mb-3">
+                        <label for="overallBudgetInput"
+                          >Overall Budget (ZAR)</label
+                        >
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="overallBudgetInput"
+                          step="0.01"
+                          min="0"
+                        />
+                      </div>
                       <div class="form-group">
                         <label for="tripDestination" class="form-label"
                           >Destination</label
@@ -414,19 +426,6 @@
               <div class="col-md-6">
                 <div class="card">
                   <div class="card-body">
-                    <h5 class="card-title">Budget Overview</h5>
-                    <div class="form-group mb-3">
-                      <label for="overallBudgetInput"
-                        >Overall Budget (ZAR)</label
-                      >
-                      <input
-                        type="number"
-                        class="form-control"
-                        id="overallBudgetInput"
-                        step="0.01"
-                        min="0"
-                      />
-                    </div>
                     <div class="budget-summary">
                       <div class="d-flex justify-content-between mb-2">
                         <span>Estimated Budget</span>
@@ -468,7 +467,6 @@
                         <thead>
                           <tr>
                             <th>Category</th>
-                            <th>Percentage</th>
                             <th class="text-end">Estimated</th>
                             <th class="text-end">Actual</th>
                           </tr>

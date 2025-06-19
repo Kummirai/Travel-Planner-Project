@@ -155,7 +155,6 @@ function saveExpense() {
 
   document.getElementById("expenseModal").remove();
 }
-
 function initializeNewTrip() {
   const today = new Date();
   const tomorrow = new Date();
@@ -211,7 +210,6 @@ function initializeNewTrip() {
     days: getDaysBetweenDates(today, tomorrow),
   };
 }
-
 // New saveTrip function
 function saveTrip() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -238,7 +236,8 @@ function saveTrip() {
       flights: [],
       hotels: [],
       budget: {
-        estimatedTotal: 0,
+        estimatedTotal:
+          parseFloat(document.getElementById("overallBudgetInput").value) || 0,
         actualTotal: 0,
         estimated: {
           Flights: 0,
@@ -277,6 +276,13 @@ function saveTrip() {
       trip.description = document.getElementById("tripDescription").value;
       trip.status = document.getElementById("tripStatus").value;
       trip.days = getDaysBetweenDates(trip.startDate, trip.endDate);
+
+      // Update estimated budget if overall budget has changed
+      const newOverallBudget =
+        parseFloat(document.getElementById("overallBudgetInput").value) || 0;
+      if (trip.budget.estimatedTotal !== newOverallBudget) {
+        trip.budget.estimatedTotal = newOverallBudget;
+      }
     }
   }
 
@@ -319,6 +325,8 @@ function loadTrip(tripId) {
   document.getElementById("tripEndDate").valueAsDate = new Date(trip.endDate);
   document.getElementById("tripDescription").value = trip.description || "";
   document.getElementById("tripStatus").value = trip.status || "Planning";
+  document.getElementById("overallBudgetInput").value =
+    trip.budget.estimatedTotal || 0;
 
   const startDate = formatDate(trip.startDate);
   const endDate = formatDate(trip.endDate);
