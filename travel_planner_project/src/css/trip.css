@@ -4,7 +4,6 @@
   padding: 0 20px;
 }
 
-/* Navigation */
 .navbar {
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -90,7 +89,6 @@
   border-bottom: none;
 }
 
-/* Main Content */
 main {
   padding: 2rem 0;
 }
@@ -118,7 +116,6 @@ main {
   gap: 1rem;
 }
 
-/* Buttons */
 .btn {
   padding: 0.5rem 1rem;
   border: none;
@@ -166,7 +163,6 @@ main {
   font-size: 0.8rem;
 }
 
-/* Tabs */
 .nav-tabs {
   display: flex;
   border-bottom: 1px solid #dee2e6;
@@ -214,7 +210,6 @@ main {
   display: block;
 }
 
-/* Cards */
 .card {
   background: white;
   border-radius: 8px;
@@ -233,7 +228,6 @@ main {
   color: #333;
 }
 
-/* Grid System */
 .row {
   display: flex;
   flex-wrap: wrap;
@@ -260,7 +254,6 @@ main {
   }
 }
 
-/* Forms */
 .form-label {
   display: block;
   margin-bottom: 0.5rem;
@@ -306,7 +299,6 @@ main {
   border-radius: 0 4px 4px 0;
 }
 
-/* Checkboxes */
 .form-check {
   display: flex;
   align-items: center;
@@ -327,7 +319,6 @@ main {
   gap: 1rem;
 }
 
-/* Tables */
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -350,7 +341,6 @@ main {
   text-align: right;
 }
 
-/* Progress Bar */
 .progress {
   background-color: #e9ecef;
   border-radius: 4px;
@@ -364,7 +354,6 @@ main {
   transition: width 0.3s;
 }
 
-/* Modals */
 .modal {
   display: none;
   position: fixed;
@@ -434,7 +423,6 @@ main {
   gap: 1rem;
 }
 
-/* Accordion */
 .accordion {
   border: 1px solid #dee2e6;
   border-radius: 4px;
@@ -478,7 +466,6 @@ main {
   display: block;
 }
 
-/* Utility Classes */
 .d-flex {
   display: flex;
 }
@@ -539,7 +526,6 @@ main {
   border: 1px solid #dee2e6;
 }
 
-/* Empty State */
 .empty-state {
   text-align: center;
   padding: 3rem 0;
@@ -556,7 +542,6 @@ main {
   margin-bottom: 0.5rem;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   .container {
     padding: 0 15px;
@@ -594,7 +579,6 @@ main {
   }
 }
 
-/* List Groups */
 .list-group {
   display: flex;
   flex-direction: column;
@@ -623,13 +607,11 @@ main {
   border-bottom-left-radius: 4px;
 }
 
-/* Canvas */
 canvas {
   max-width: 100%;
   height: auto;
 }
 
-/* Tab Navigation */
 .tab-nav {
   display: flex;
   list-style: none;
@@ -669,7 +651,6 @@ canvas {
   margin-right: 5px;
 }
 
-/* Tab Content */
 .tab-content {
   padding: 15px 0;
 }
@@ -682,7 +663,6 @@ canvas {
   display: block;
 }
 
-/* Tab Navigation */
 .tab-nav {
   display: flex;
   list-style: none;
@@ -722,7 +702,6 @@ canvas {
   margin-right: 5px;
 }
 
-/* Tab Content */
 .tab-content {
   padding: 15px 0;
 }
@@ -735,7 +714,6 @@ canvas {
   display: block;
 }
 
-/* Budget Tab Specific Styles */
 .budget-summary {
   margin-bottom: 20px;
 }
@@ -773,14 +751,13 @@ canvas {
   text-align: right;
 }
 
-/* Hotel Search Styles */
 .search-input-group {
   position: relative;
   display: flex;
 }
 
 .search-input-group .form-control {
-  padding-right: 100px; /* Space for button */
+  padding-right: 100px;
   flex-grow: 1;
 }
 
@@ -796,7 +773,6 @@ canvas {
   background: #0b5ed7;
 }
 
-/* Saved Hotels Section */
 .saved-hotels-container {
   background: #f8f9fa;
   border-radius: 8px;
@@ -814,7 +790,6 @@ canvas {
   margin: 0;
 }
 
-/* Results Section */
 .hotel-results-container {
   margin-top: 30px;
 }
@@ -824,7 +799,6 @@ canvas {
   color: #495057;
 }
 
-/* Responsive Adjustments */
 @media (max-width: 768px) {
   .search-button {
     position: relative;

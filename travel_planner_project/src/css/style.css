@@ -13,7 +13,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Reset and Base Styles */
+
 * {
   margin: 0;
   padding: 0;
@@ -263,7 +263,7 @@ header nav a:hover {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* align-items: center; */
+
   background: linear-gradient(
       135deg,
       rgba(0, 0, 0, 0) 0%,

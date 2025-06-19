@@ -1,5 +1,5 @@
 :root {
-  /* Color Variables */
+
   --color-primary: rgba(52, 152, 219, 0.9);
   --color-primary-hover: rgba(41, 128, 185, 1);
   --color-text-dark: #2c3e50;
@@ -17,7 +17,7 @@
   --color-btn-primary-hover: rgba(41, 128, 185, 0.9);
   --color-shadow: rgba(0, 0, 0, 0.15);
 
-  /* Spacing Variables */
+ 
   --space-xs: 8px;
   --space-sm: 12px;
   --space-md: 16px;
@@ -25,7 +25,7 @@
   --space-xl: 32px;
   --space-xxl: 40px;
 
-  /* Border Radius */
+
   --radius-sm: 4px;
   --radius-md: 12px;
 }
@@ -40,7 +40,7 @@ a:hover {
   color: var(--color-primary-hover);
 }
 
-/* Layout */
+
 .container {
   width: 100%;
   max-width: 1200px;
@@ -48,7 +48,7 @@ a:hover {
   padding: 0 15px;
 }
 
-/* Navigation */
+
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -71,7 +71,7 @@ a:hover {
   color: var(--color-text-dark);
 }
 
-/* Auth Container */
+
 .auth-container {
   min-height: calc(100vh - 56px);
   display: flex;
@@ -83,7 +83,7 @@ a:hover {
   background-size: cover;
 }
 
-/* Auth Card */
+
 .auth-card {
   border: none;
   border-radius: var(--radius-md);
@@ -110,7 +110,7 @@ a:hover {
   font-size: 1.75rem;
 }
 
-/* Forms */
+
 .form-label {
   display: block;
   color: var(--color-white);
@@ -141,7 +141,7 @@ a:hover {
   box-shadow: 0 0 0 0.25rem var(--color-white-15);
 }
 
-/* Buttons */
+
 .btn {
   display: block;
   width: 100%;
@@ -162,7 +162,7 @@ a:hover {
   background-color: var(--color-btn-primary-hover);
 }
 
-/* Utility Classes */
+
 .text-center {
   text-align: center;
 }
@@ -187,7 +187,7 @@ a:hover {
   box-shadow: 0 0.5rem 1rem var(--color-shadow);
 }
 
-/* Responsive */
+
 @media (max-width: 576px) {
   .auth-card-body {
     padding: var(--space-lg);

@@ -1,6 +1,6 @@
 
 :root {
-  /* Color Variables */
+ 
   --color-primary: #2563eb;
   --color-primary-hover: #1d4ed8;
   --color-primary-light: #93c5fd;
@@ -15,7 +15,7 @@
   --color-danger: #ef4444;
   --color-info: #3b82f6;
 
-  /* Shadow Variables */
+
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -24,7 +24,7 @@
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
 
-  /* Spacing Variables */
+
   --space-xs: 0.5rem;
   --space-sm: 0.75rem;
   --space-md: 1rem;
@@ -32,20 +32,19 @@
   --space-xl: 2rem;
   --space-xxl: 3rem;
 
-  /* Border Radius */
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
   --radius-xl: 1rem;
   --radius-full: 9999px;
 
-  /* Transition */
+
   --transition-fast: 0.15s;
   --transition-normal: 0.3s;
   --transition-slow: 0.5s;
 }
 
-/* Base Styles */
+
 body {
   font-family: "Open Sans", sans-serif;
   color: var(--color-dark);
@@ -63,7 +62,7 @@ a:hover {
   color: var(--color-primary-hover);
 }
 
-/* Layout */
+
 .container {
   width: 100%;
   max-width: 1200px;
@@ -71,7 +70,7 @@ a:hover {
   padding: 0 var(--space-md);
 }
 
-/* Navigation - Enhanced */
+
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -127,7 +126,7 @@ a:hover {
   font-weight: 600;
 }
 
-/* Dropdown - Enhanced */
+
 .dropdown-toggle {
   display: flex;
   align-items: center;
@@ -193,12 +192,12 @@ a:hover {
   }
 }
 
-/* Main Content */
+
 main {
   padding: var(--space-xl) 0;
 }
 
-/* Cards - Enhanced */
+
 .card {
   background-color: var(--color-lighter);
   border-radius: var(--radius-lg);
@@ -232,7 +231,7 @@ main {
   margin-bottom: var(--space-sm);
 }
 
-/* Buttons - Enhanced */
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -274,7 +273,7 @@ main {
   font-size: 0.75rem;
 }
 
-/* Empty State - Enhanced */
+
 #noTripsMessage {
   padding: var(--space-xxl) 0;
   background-color: var(--color-lighter);
@@ -288,7 +287,7 @@ main {
   margin-bottom: var(--space-md);
 }
 
-/* Grid System */
+
 .row {
   display: flex;
   flex-wrap: wrap;
@@ -314,7 +313,7 @@ main {
   }
 }
 
-/* Utility Classes */
+
 .text-muted {
   color: var(--color-secondary) !important;
 }
@@ -362,7 +361,7 @@ main {
   line-height: 1;
 }
 
-/* Responsive Adjustments */
+
 @media (max-width: 768px) {
   .navbar-nav {
     flex-direction: column;
@@ -382,7 +381,7 @@ main {
   }
 }
 
-/* Animation */
+
 @keyframes fadeIn {
   from {
     opacity: 0;
