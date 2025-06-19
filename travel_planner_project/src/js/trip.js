@@ -568,3 +568,18 @@ function updateTripBudget() {
 
   updateBudgetDisplay(trips[tripIndex].budget);
 }
+
+let budgetChart = null; // Store chart instance globally
+
+function initializeBudgetChart() {
+  const ctx = document.getElementById("budgetChart");
+
+  // Destroy previous chart if it exists
+  if (budgetChart) {
+    budgetChart.destroy();
+  }
+
+  budgetChart = new Chart(ctx, {
+    // your chart configuration
+  });
+}
