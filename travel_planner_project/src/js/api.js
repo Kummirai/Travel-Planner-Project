@@ -704,52 +704,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   }
-
-  // Hotel search form handler
-  const hotelSearchForm = document.getElementById("hotelSearchForm");
-  if (hotelSearchForm) {
-    hotelSearchForm.addEventListener("submit", function (e) {
-      e.preventDefault();
-
-      const location = document.getElementById("hotelLocation").value;
-      const checkIn = document.getElementById("hotelCheckIn").value;
-      const checkOut = document.getElementById("hotelCheckOut").value;
-      const guests = document.getElementById("hotelGuests").value;
-      const rooms = document.getElementById("hotelRooms").value;
-
-      if (!location || !checkIn || !checkOut) {
-        showAlert("Please fill in required fields", "danger");
-        return;
-      }
-
-      // Show loading state
-      const submitBtn = hotelSearchForm.querySelector('button[type="submit"]');
-      const originalBtnText = submitBtn.innerHTML;
-      submitBtn.innerHTML =
-        '<i class="fas fa-spinner fa-spin me-1"></i> Searching...';
-      submitBtn.disabled = true;
-
-      // Perform search
-      searchHotels({
-        location,
-        checkIn,
-        checkOut,
-        guests,
-        rooms,
-      }).then((hotels) => {
-        // Restore button
-        submitBtn.innerHTML = originalBtnText;
-        submitBtn.disabled = false;
-
-        // Display results
-        displayHotelResults(hotels);
-      });
-    });
-  }
 });
-
-// Mock hotel search
-
 
 function loadSavedFlights(flights) {
   const container = document.getElementById("savedFlightsContainer");

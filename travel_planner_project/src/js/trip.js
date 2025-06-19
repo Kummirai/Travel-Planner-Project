@@ -19,6 +19,11 @@ document.addEventListener("DOMContentLoaded", function () {
   // Save Trip button handler
   document.getElementById("saveTripBtn").addEventListener("click", saveTrip);
 
+  // Budget handlers
+  document
+    .getElementById("addExpenseBtn")
+    .addEventListener("click", showAddExpenseModal);
+
   initTabSystem();
 
   const urlParams = new URLSearchParams(window.location.search);
@@ -496,4 +501,70 @@ function updateBudgetChart(data) {
     chart.data.datasets[0].data = data;
     chart.update();
   }
+}
+
+// Enhanced budget functions
+function setupBudgetHandlers() {
+  const expenseCategories = [
+    "Flights",
+    "Hotels",
+    "Food",
+    "Activities",
+    "Transportation",
+    "Other",
+  ];
+
+  expenseCategories.forEach((category) => {
+    const input = document.getElementById(`estimated${category}`);
+    if (input) {
+      input.addEventListener("change", function () {
+        updateTripBudget();
+      });
+    }
+  });
+}
+
+function updateTripBudget() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const tripId = urlParams.get("id");
+  const trips = JSON.parse(localStorage.getItem("trips")) || [];
+  const tripIndex = trips.findIndex((t) => t.id === tripId);
+
+  if (tripIndex === -1) return;
+
+  const expenseCategories = [
+    "Flights",
+    "Hotels",
+    "Food",
+    "Activities",
+    "Transportation",
+    "Other",
+  ];
+
+  let estimatedTotal = 0;
+
+  expenseCategories.forEach((category) => {
+    const input = document.getElementById(`estimated${category}`);
+    if (input) {
+      const value = parseFloat(input.value) || 0;
+      trips[tripIndex].budget.estimated[category] = value;
+      estimatedTotal += value;
+    }
+  });
+
+  // Add flight and hotel costs
+  trips[tripIndex].flights.forEach((flight) => {
+    estimatedTotal += flight.price;
+    trips[tripIndex].budget.estimated.Flights += flight.price;
+  });
+
+  trips[tripIndex].hotels.forEach((hotel) => {
+    estimatedTotal += hotel.totalPrice;
+    trips[tripIndex].budget.estimated.Hotels += hotel.totalPrice;
+  });
+
+  trips[tripIndex].budget.estimatedTotal = estimatedTotal;
+  localStorage.setItem("trips", JSON.stringify(trips));
+
+  updateBudgetDisplay(trips[tripIndex].budget);
 }

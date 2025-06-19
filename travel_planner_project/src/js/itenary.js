@@ -1,13 +1,35 @@
 document.addEventListener("DOMContentLoaded", function () {
+  // Initialize the add day modal
+  const addDayModal = document.createElement("div");
+  addDayModal.className = "modal-overlay";
+  addDayModal.id = "addDayModal";
+  addDayModal.style.display = "none";
+  addDayModal.innerHTML = `
+    <div class="modal-content">
+      <h3>Add New Day</h3>
+      <form id="addDayForm">
+        <div class="form-group">
+          <label for="dayDate">Date</label>
+          <input type="date" class="form-control" id="dayDate" required>
+        </div>
+        <div class="form-group">
+          <label for="dayTitle">Day Title (optional)</label>
+          <input type="text" class="form-control" id="dayTitle" placeholder="e.g., Arrival Day">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="cancelDayBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Add Day</button>
+        </div>
+      </form>
+    </div>
+  `;
+  document.body.appendChild(addDayModal);
+
   // Add Day button click handler
   const addDayBtn = document.getElementById("addDayBtn");
   if (addDayBtn) {
     addDayBtn.addEventListener("click", function () {
-      // Show the add day modal
-      const addDayModal = new bootstrap.Modal(
-        document.getElementById("addDayModal")
-      );
-      addDayModal.show();
+      document.getElementById("addDayModal").style.display = "flex";
 
       // Set default date to trip start date or today
       const tripStartDate = document.getElementById("tripStartDate").value;
@@ -16,10 +38,20 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Save Day button in modal
-  const saveDayBtn = document.getElementById("saveDayBtn");
-  if (saveDayBtn) {
-    saveDayBtn.addEventListener("click", function () {
+  // Cancel button handler
+  document
+    .getElementById("cancelDayBtn")
+    .addEventListener("click", function () {
+      document.getElementById("addDayModal").style.display = "none";
+      document.getElementById("addDayForm").reset();
+    });
+
+  // Save Day form handler
+  document
+    .getElementById("addDayForm")
+    .addEventListener("submit", function (e) {
+      e.preventDefault();
+
       const dayDate = document.getElementById("dayDate").value;
       const dayTitle =
         document.getElementById("dayTitle").value ||
@@ -30,39 +62,94 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      // Create new day element
-      addDayToItinerary({
+      // Create new day object
+      const newDay = {
         id: generateId(),
         date: dayDate,
         title: dayTitle,
         activities: [],
-      });
+      };
 
-      // Hide modal and reset form
-      bootstrap.Modal.getInstance(
-        document.getElementById("addDayModal")
-      ).hide();
+      // Add to itinerary
+      addDayToItinerary(newDay);
+
+      // Save to trip data
+      saveDayToTrip(newDay);
+
+      // Close modal and reset form
+      document.getElementById("addDayModal").style.display = "none";
       document.getElementById("addDayForm").reset();
     });
-  }
 
-  // Add Activity button in each day
+  // Add similar modal for activities
+  const addActivityModal = document.createElement("div");
+  addActivityModal.className = "modal-overlay";
+  addActivityModal.id = "addActivityModal";
+  addActivityModal.style.display = "none";
+  addActivityModal.innerHTML = `
+    <div class="modal-content">
+      <h3>Add Activity</h3>
+      <form id="addActivityForm">
+        <div class="form-group">
+          <label for="activityName">Activity Name</label>
+          <input type="text" class="form-control" id="activityName" required>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="activityTime">Time</label>
+              <input type="time" class="form-control" id="activityTime" required>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="activityDuration">Duration (hours)</label>
+              <input type="number" class="form-control" id="activityDuration" min="0.5" max="24" step="0.5" value="1">
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="activityLocation">Location</label>
+          <input type="text" class="form-control" id="activityLocation">
+        </div>
+        <div class="form-group">
+          <label for="activityCost">Estimated Cost (ZAR)</label>
+          <input type="number" class="form-control" id="activityCost" min="0" step="0.01" value="0">
+        </div>
+        <div class="form-group">
+          <label for="activityNotes">Notes</label>
+          <textarea class="form-control" id="activityNotes" rows="2"></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="cancelActivityBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Add Activity</button>
+        </div>
+      </form>
+    </div>
+  `;
+  document.body.appendChild(addActivityModal);
+
+  // Activity button handlers
   document.addEventListener("click", function (e) {
     if (e.target.classList.contains("add-activity-btn")) {
       const dayId = e.target.closest(".accordion-item").id.replace("day-", "");
       document.getElementById("addActivityForm").dataset.dayId = dayId;
-
-      const addActivityModal = new bootstrap.Modal(
-        document.getElementById("addActivityModal")
-      );
-      addActivityModal.show();
+      document.getElementById("addActivityModal").style.display = "flex";
     }
   });
 
-  // Save Activity button in modal
-  const saveActivityBtn = document.getElementById("saveActivityBtn");
-  if (saveActivityBtn) {
-    saveActivityBtn.addEventListener("click", function () {
+  document
+    .getElementById("cancelActivityBtn")
+    .addEventListener("click", function () {
+      document.getElementById("addActivityModal").style.display = "none";
+      document.getElementById("addActivityForm").reset();
+    });
+
+  document
+    .getElementById("addActivityForm")
+    .addEventListener("submit", function (e) {
+      e.preventDefault();
+
       const dayId = document.getElementById("addActivityForm").dataset.dayId;
       const activityName = document.getElementById("activityName").value;
       const activityTime = document.getElementById("activityTime").value;
@@ -93,14 +180,117 @@ document.addEventListener("DOMContentLoaded", function () {
       // Add activity to the day
       addActivityToDay(dayId, activity);
 
-      // Hide modal and reset form
-      bootstrap.Modal.getInstance(
-        document.getElementById("addActivityModal")
-      ).hide();
+      // Save to trip data
+      saveActivityToDay(dayId, activity);
+
+      // Close modal and reset form
+      document.getElementById("addActivityModal").style.display = "none";
       document.getElementById("addActivityForm").reset();
     });
-  }
 });
+
+// Enhance the saveDayToTrip function
+function saveDayToTrip(dayData) {
+  const urlParams = new URLSearchParams(window.location.search);
+  const tripId = urlParams.get("id");
+  const trips = JSON.parse(localStorage.getItem("trips")) || [];
+  const tripIndex = trips.findIndex((t) => t.id === tripId);
+
+  if (tripIndex === -1) return;
+
+  // Initialize days array if it doesn't exist
+  if (!trips[tripIndex].days) {
+    trips[tripIndex].days = [];
+  }
+
+  // Check if day already exists
+  const dayIndex = trips[tripIndex].days.findIndex((d) => d.id === dayData.id);
+
+  if (dayIndex === -1) {
+    // Add new day
+    trips[tripIndex].days.push(dayData);
+
+    // Update trip days count
+    trips[tripIndex].days = getDaysBetweenDates(
+      trips[tripIndex].startDate,
+      trips[tripIndex].endDate
+    );
+  } else {
+    // Update existing day
+    trips[tripIndex].days[dayIndex] = dayData;
+  }
+
+  // Save back to localStorage
+  localStorage.setItem("trips", JSON.stringify(trips));
+}
+
+// Enhance the saveActivityToDay function
+function saveActivityToDay(dayId, activity) {
+  const urlParams = new URLSearchParams(window.location.search);
+  const tripId = urlParams.get("id");
+  const trips = JSON.parse(localStorage.getItem("trips")) || [];
+  const tripIndex = trips.findIndex((t) => t.id === tripId);
+
+  if (tripIndex === -1) return;
+
+  // Find the day
+  const dayIndex = trips[tripIndex].days.findIndex((d) => d.id === dayId);
+  if (dayIndex === -1) return;
+
+  // Initialize activities array if it doesn't exist
+  if (!trips[tripIndex].days[dayIndex].activities) {
+    trips[tripIndex].days[dayIndex].activities = [];
+  }
+
+  // Check if activity already exists
+  const activityIndex = trips[tripIndex].days[dayIndex].activities.findIndex(
+    (a) => a.id === activity.id
+  );
+
+  if (activityIndex === -1) {
+    // Add new activity
+    trips[tripIndex].days[dayIndex].activities.push(activity);
+  } else {
+    // Update existing activity
+    trips[tripIndex].days[dayIndex].activities[activityIndex] = activity;
+  }
+
+  // Update budget
+  trips[tripIndex].budget.estimated.Activities += activity.cost;
+  trips[tripIndex].budget.estimatedTotal += activity.cost;
+
+  // Save back to localStorage
+  localStorage.setItem("trips", JSON.stringify(trips));
+
+  // Update budget display
+  updateBudgetDisplay(trips[tripIndex].budget);
+}
+
+function saveActivityToDay(dayId, activity) {
+  const urlParams = new URLSearchParams(window.location.search);
+  const tripId = urlParams.get("id");
+  const trips = JSON.parse(localStorage.getItem("trips")) || [];
+  const tripIndex = trips.findIndex((t) => t.id === tripId);
+
+  if (tripIndex === -1) return;
+
+  // Find the day
+  const dayIndex = trips[tripIndex].days.findIndex((d) => d.id === dayId);
+  if (dayIndex === -1) return;
+
+  // Add the activity
+  trips[tripIndex].days[dayIndex].activities.push(activity);
+
+  // Update budget
+  trips[tripIndex].budget.estimated.Activities += activity.cost;
+  trips[tripIndex].budget.estimatedTotal += activity.cost;
+
+  // Save back to localStorage
+  localStorage.setItem("trips", JSON.stringify(trips));
+
+  // Update budget display
+  updateBudgetDisplay(trips[tripIndex].budget);
+}
 
 function addDayToItinerary(dayData) {
   const accordion = document.getElementById("itineraryAccordion");
