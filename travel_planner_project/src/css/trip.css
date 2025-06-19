@@ -14,14 +14,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 01.2rem 0;
 }
 
-.navbar-brand {
-  font-family: "Poppins", sans-serif;
-  font-weight: 600;
-  font-size: 1.5rem;
-  color: #007bff;
-  text-decoration: none;
+
+.navbar-brand i {
+  margin-right: var(--space-xs);
+  color: var(--color-primary);
 }
 
 .navbar-nav {
