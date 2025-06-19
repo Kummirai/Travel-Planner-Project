@@ -2,12 +2,11 @@
 function formatDateForAPI(dateString) {
   if (!dateString) return "";
   const date = new Date(dateString);
-  return date.toISOString().split("T")[0]; // Returns YYYY-MM-DD
+  return date.toISOString().split("T")[0];
 }
 
 function initializeTripsData() {
   if (!localStorage.getItem("trips")) {
-    // Create initial data structure if it doesn't exist
     const initialData = [
       {
         id: "default-trip",
@@ -66,7 +65,6 @@ function convertToZAR(amount, fromCurrency) {
 }
 
 function formatCurrency(amount, currency = "ZAR") {
-  // Always convert to ZAR first
   const zarAmount =
     currency.toUpperCase() === "ZAR" ? amount : convertToZAR(amount, currency);
 
@@ -197,21 +195,17 @@ function validateAirportCode(code) {
 
   const upperCode = code.toUpperCase().trim();
 
-  // Check if it's a mapped code
   if (airportMappings[upperCode]) {
     return airportMappings[upperCode];
   }
 
-  // Return as-is if it's already a valid 3-letter IATA code
   if (/^[A-Z]{3}$/.test(upperCode)) {
     return upperCode;
   }
 
-  // If it's not recognized, return null to trigger validation error
   return null;
 }
 
-// Amadeus API Configuration
 const AMADEUS_CONFIG = {
   baseUrl: "https://test.api.amadeus.com/v2",
   authUrl: "https://test.api.amadeus.com/v1/security/oauth2/token",
@@ -379,13 +373,10 @@ async function fetchFlightsFromAmadeus(params) {
   }
 }
 
-// In-memory storage replacement for localStorage
 let tripsData = [];
 
-// Initialize with sample trip data if needed
 function initializeTripsData() {
   if (tripsData.length === 0) {
-    // Create a sample trip for testing
     tripsData = [
       {
         id: "sample-trip-1",
@@ -417,54 +408,42 @@ function initializeTripsData() {
   }
 }
 
-// Fixed saveFlightToTrip function
-// In api.js, enhance the saveFlightToTrip function:
 function saveFlightToTrip(flight) {
-  initializeTripsData(); // Ensure data exists
+  initializeTripsData();
 
-  // Get current trips data
   const trips = JSON.parse(localStorage.getItem("trips"));
   const tripId =
     new URLSearchParams(window.location.search).get("id") || trips[0].id;
 
-  // Find the trip
   const tripIndex = trips.findIndex((t) => t.id === tripId);
   if (tripIndex === -1) {
     showAlert("Trip not found", "danger");
     return;
   }
 
-  // Initialize flights array if needed
   if (!trips[tripIndex].flights) {
     trips[tripIndex].flights = [];
   }
 
-  // Check if flight exists
   const existingIndex = trips[tripIndex].flights.findIndex(
     (f) => f.id === flight.id
   );
 
   if (existingIndex >= 0) {
-    // Update existing flight
     const oldPrice = trips[tripIndex].flights[existingIndex].price;
     trips[tripIndex].flights[existingIndex] = flight;
 
-    // Adjust budget
     trips[tripIndex].budget.estimated.Flights += flight.price - oldPrice;
     trips[tripIndex].budget.estimatedTotal += flight.price - oldPrice;
   } else {
-    // Add new flight
     trips[tripIndex].flights.push(flight);
 
-    // Update budget
     trips[tripIndex].budget.estimated.Flights += flight.price;
     trips[tripIndex].budget.estimatedTotal += flight.price;
   }
 
-  // Save back to localStorage
   localStorage.setItem("trips", JSON.stringify(trips));
 
-  // Update UI
   loadSavedFlights(trips[tripIndex].flights);
   updateBudgetDisplay(trips[tripIndex].budget);
   showAlert(
@@ -472,10 +451,9 @@ function saveFlightToTrip(flight) {
     "success"
   );
 
-  // Update trip progress
   updateTripProgress(tripId);
 }
-// Main flight search function
+
 async function searchFlights(searchParams) {
   const formattedDepartureDate = formatDateForAPI(searchParams.departureDate);
   let formattedReturnDate = null;
@@ -522,7 +500,6 @@ async function searchFlights(searchParams) {
   } catch (error) {
     console.error("Flight search error:", error);
 
-    // Reset button state
     const submitBtn = document.querySelector(
       '#flightSearchForm button[type="submit"]'
     );
@@ -536,14 +513,13 @@ async function searchFlights(searchParams) {
   }
 }
 
-// Fixed displayFlightResults function with proper event delegation
 function displayFlightResults(flights) {
   const resultsContainer = document.getElementById("flightResultsContainer");
   const resultsList = document.getElementById("flightResultsList");
 
   const savedTrips = JSON.parse(localStorage.getItem("trips")) || [];
   const allSavedFlights = savedTrips.flatMap((trip) => trip.flights || []);
-  // Clear previous results
+
   resultsList.innerHTML = "";
 
   if (flights.length === 0) {
@@ -553,7 +529,6 @@ function displayFlightResults(flights) {
     return;
   }
 
-  // Display flight results
   flights.forEach((flight) => {
     const flightElement = document.createElement("div");
     flightElement.className = "list-group-item";
@@ -594,18 +569,14 @@ function displayFlightResults(flights) {
     resultsList.appendChild(flightElement);
   });
 
-  // Show results container
   resultsContainer.style.display = "block";
 
-  // Remove old event listeners and add new ones using event delegation
   resultsList.removeEventListener("click", handleSaveFlightClick);
   resultsList.addEventListener("click", handleSaveFlightClick);
 
-  // Store flights data for access in click handler
   resultsList.flightsData = flights;
 }
 
-// Separate click handler function for better event management
 function handleSaveFlightClick(event) {
   const saveBtn = event.target.closest(".save-flight-btn");
   if (!saveBtn) return;
@@ -624,7 +595,6 @@ function handleSaveFlightClick(event) {
   }
 }
 
-// Helper function to update saved flights display
 function updateSavedFlightsDisplay(flights) {
   const container = document.getElementById("savedFlightsContainer");
   if (container) {
@@ -632,9 +602,7 @@ function updateSavedFlightsDisplay(flights) {
   }
 }
 
-// Helper function to update budget display
 function updateBudgetDisplay(budget) {
-  // Update budget display elements if they exist
   const budgetElements = document.querySelectorAll("[data-budget-category]");
   budgetElements.forEach((element) => {
     const category = element.getAttribute("data-budget-category");
@@ -653,7 +621,6 @@ function updateBudgetDisplay(budget) {
 document.addEventListener("DOMContentLoaded", function () {
   initializeTripsData();
 
-  // Flight search form handler
   const flightSearchForm = document.getElementById("flightSearchForm");
   if (flightSearchForm) {
     flightSearchForm.addEventListener("submit", async function (e) {
@@ -751,7 +718,6 @@ function loadSavedFlights(flights) {
 document.addEventListener("DOMContentLoaded", function () {
   initializeTripsData();
 
-  // Load saved flights for current trip
   const trips = JSON.parse(localStorage.getItem("trips"));
   const tripId =
     new URLSearchParams(window.location.search).get("id") || trips[0].id;
