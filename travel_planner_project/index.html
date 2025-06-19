@@ -31,13 +31,13 @@
           and more!
         </p>
         <div class="buttons">
-          <button class="btn btn-primary">Get Started</button>
-          <button class="btn btn-border">Learn More</button>
+          <a class="btn btn-primary" href="auth.html">Get Started</a>
+          <a class="btn btn-border" href="#popular-destinations">Learn More</a>
         </div>
       </section>
 
       <!--Popular destinations-->
-      <section class="popular-destinations">
+      <section id="popular-destinations" class="popular-destinations">
         <div class="heading">
           <h2>Popular Destinations</h2>
           <p>Explore these amazing places to visit</p>
@@ -296,14 +296,16 @@
           </p>
         </div>
         <form class="newsletter-form">
-          <input
-            type="email"
-            placeholder="Enter your email"
-            required
-            id="email"
-            name="email"
-            class="email-input"
-          />
+          <label for="email"
+            ><input
+              type="email"
+              placeholder="Enter your email"
+              required
+              id="email"
+              name="email"
+              class="email-input"
+          /></label>
+
           <button type="submit" class="btn btn-primary">Subscribe</button>
         </form>
         <p class="assurance">

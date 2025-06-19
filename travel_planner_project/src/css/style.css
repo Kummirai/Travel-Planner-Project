@@ -13,7 +13,6 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-
 * {
   margin: 0;
   padding: 0;
@@ -30,7 +29,7 @@ h1,
 h2,
 h3,
 h4,
-h5,
+h2,
 h6 {
   font-family: "Poppins", sans-serif;
   font-weight: 600;
@@ -40,6 +39,11 @@ header {
   align-items: center;
   justify-content: space-between;
   padding: 1.5rem 2rem;
+}
+
+a {
+  text-decoration: none;
+  color: var(--gray-color);
 }
 
 header .logo {
@@ -266,8 +270,8 @@ header nav a:hover {
 
   background: linear-gradient(
       135deg,
-      rgba(0, 0, 0, 0) 0%,
-      rgba(0, 0, 0, 0) 100%
+      rgba(0, 0, 0, 0.3) 100%,
+      rgba(0, 0, 0, 0.3) 100%
     ),
     url("../../public/images/travel.webp");
   background-size: cover;
@@ -427,7 +431,15 @@ header nav a:hover {
 
 .your-journey {
   align-items: center;
-  background-image: url("https://images.unsplash.com/photo-1503220317375-aaad61436b1b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80");
+  background: linear-gradient(
+      135deg,
+      rgba(0, 0, 0, 0.3) 100%,
+      rgba(0, 0, 0, 0.3) 100%
+    ),
+    url("https://images.unsplash.com/photo-1503220317375-aaad61436b1b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80");
+  background-size: cover;
+  background-position: top;
+  background-attachment: fixed;
 }
 
 .your-journey .fa-plane-departure {
@@ -657,4 +669,513 @@ form a {
   font-family: "Times New Roman", Times, serif;
   font-size: 1rem;
   padding-left: 0.3rem;
+}
+
+.newsletter-form {
+  background-color: transparent;
+}
+
+.button {
+  margin-top: 0.5rem;
+}
+
+/* Add this at the end of your existing style.css file */
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  /* General adjustments */
+  body {
+    font-size: 14px;
+  }
+
+  /* Header */
+  header {
+    padding: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  header .logo {
+    margin-bottom: 1rem;
+  }
+
+  header nav {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  header nav a {
+    margin: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  /* Hero section */
+  .hero {
+    min-height: 70vh;
+    padding: 0 1rem;
+    background-attachment: scroll;
+  }
+
+  .hero h2 {
+    font-size: 2.2rem;
+  }
+
+  .hero p {
+    font-size: 1.1rem;
+  }
+
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn {
+    width: 100%;
+    margin: 0.5rem 0;
+    text-align: center;
+  }
+
+  /* Popular destinations */
+  .destinations {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 2rem 1rem;
+  }
+
+  .heading h2 {
+    font-size: 1.6rem;
+  }
+
+  .heading p {
+    font-size: 1.1rem;
+  }
+
+  /* Features */
+  .card-container {
+    grid-template-columns: 1fr;
+    padding: 2rem 1rem;
+    gap: 1.5rem;
+  }
+
+  /* Banner */
+  .banner {
+    padding: 2rem;
+    height: auto;
+    min-height: 60vh;
+    background-attachment: scroll;
+  }
+
+  .banner h2 {
+    font-size: 2rem;
+  }
+
+  .banner p {
+    font-size: 1.1rem;
+  }
+
+  /* Traveller stories */
+  .traveller-stories .card-container {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  /* Travel inspiration */
+  .travel-insipration .card-container {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 0 1rem;
+  }
+
+  .travel-card {
+    margin-bottom: 1.5rem;
+  }
+
+  /* How it works */
+  #how-it-works .card-container {
+    grid-template-columns: 1fr;
+  }
+
+  /* Newsletter */
+  .newsletter-form {
+    width: 90%;
+    flex-direction: column;
+  }
+
+  .newsletter-form input[type="email"] {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  .newsletter-form .btn {
+    width: 100%;
+  }
+
+  /* Footer */
+  footer {
+    padding: 1.5rem;
+  }
+
+  .footer-nav {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footer-nav a {
+    margin: 0.3rem 0;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Extra small devices */
+  .hero h2 {
+    font-size: 1.8rem;
+  }
+
+  .hero p {
+    font-size: 1rem;
+  }
+
+  .banner {
+    padding: 1.5rem;
+  }
+
+  .banner h2 {
+    font-size: 1.6rem;
+  }
+
+  .your-journey h2 {
+    font-size: 2.5rem;
+  }
+
+  /* Adjust font sizes for better readability */
+  h2 {
+    font-size: 1.4rem;
+  }
+
+  h3 {
+    font-size: 1.2rem;
+  }
+
+  p {
+    font-size: 0.9rem;
+  }
+}
+
+/* Add these animations to your existing style.css file */
+
+/* Animation Keyframes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* Animation Classes */
+.animate-fade {
+  animation: fadeIn 1s ease-in-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.8s ease-out;
+}
+
+.animate-slide-left {
+  animation: slideInLeft 0.8s ease-out;
+}
+
+.animate-slide-right {
+  animation: slideInRight 0.8s ease-out;
+}
+
+.animate-pulse {
+  animation: pulse 2s infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Element-specific Animations */
+/* Hero Section */
+.hero h2 {
+  animation: slideUp 0.8s ease-out 0.2s both;
+}
+
+.hero p {
+  animation: slideUp 0.8s ease-out 0.4s both;
+}
+
+.hero .buttons {
+  animation: slideUp 0.8s ease-out 0.6s both;
+}
+
+/* Popular Destinations */
+.popular-destinations .heading {
+  animation: fadeIn 1s ease-in-out;
+}
+
+.destinations .card {
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+.destinations .card:nth-child(1) {
+  animation-delay: 0.2s;
+}
+.destinations .card:nth-child(2) {
+  animation-delay: 0.4s;
+}
+.destinations .card:nth-child(3) {
+  animation-delay: 0.6s;
+}
+.destinations .card:nth-child(4) {
+  animation-delay: 0.8s;
+}
+
+.destinations .card:hover {
+  transform: translateY(-5px);
+  transition: transform 0.3s ease;
+}
+
+/* Features */
+.feature-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.feature-card i {
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover i {
+  transform: scale(1.2);
+}
+
+/* Banner */
+.banner {
+  animation: fadeIn 1.5s ease-in-out;
+}
+
+/* Traveller Stories */
+.traveller-stories .card {
+  transition: transform 0.3s ease;
+}
+
+.traveller-stories .card:hover {
+  transform: scale(1.03);
+}
+
+.stars i {
+  transition: transform 0.3s ease;
+}
+
+.stars:hover i {
+  transform: scale(1.2);
+}
+
+/* Travel Inspiration */
+.travel-card {
+  transition: transform 0.3s ease;
+}
+
+.travel-card:hover {
+  transform: translateY(-5px);
+}
+
+.read-more {
+  transition: all 0.3s ease;
+}
+
+.read-more:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* How It Works */
+#how-it-works .feature-card {
+  transition: transform 0.3s ease;
+}
+
+#how-it-works .feature-card:hover {
+  transform: scale(1.05);
+}
+
+#how-it-works h3 {
+  transition: all 0.3s ease;
+}
+
+#how-it-works .feature-card:hover h3 {
+  background-color: var(--secondary-color);
+  transform: rotate(360deg);
+}
+
+/* Newsletter */
+.newsletter-form input[type="email"] {
+  transition: all 0.3s ease;
+}
+
+.newsletter-form input[type="email"]:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 8px rgba(79, 195, 247, 0.5);
+}
+
+/* Footer */
+.footer-nav a {
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.footer-nav a:hover {
+  transform: translateY(-3px);
+}
+
+.social-icons .fab {
+  transition: all 0.3s ease;
+}
+
+.social-icons .fab:hover {
+  transform: scale(1.2);
+  color: var(--primary-color);
+}
+
+/* Button Animations */
+.btn {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-primary::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: 0.5s;
+}
+
+.btn-primary:hover::after {
+  left: 100%;
+}
+
+
+@media (max-width: 768px) {
+  .destinations .card,
+  .feature-card,
+  .traveller-stories .card,
+  .travel-card,
+  #how-it-works .feature-card {
+    animation: none !important;
+  }
+
+  .hero h2,
+  .hero p,
+  .hero .buttons {
+    animation: slideUp 0.8s ease-out 0.2s both;
+  }
+
+  .btn {
+    width: fit-content;
+  }
+}
+
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .destinations {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .card-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .travel-insipration .card-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .banner {
+    padding: 3rem;
+  }
 }

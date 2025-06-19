@@ -546,7 +546,7 @@ function displayFlightResults(flights) {
           </small>
         </div>
         <div class="text-end">
-          <h5 class="mb-1">${formatCurrency(flight.price, flight.currency)}</h5>
+          <h2 class="mb-1">${formatCurrency(flight.price, flight.currency)}</h2>
           <button class="btn btn-sm btn-outline-primary save-flight-btn" 
                   data-flight-id="${flight.id}"
                   type="button">

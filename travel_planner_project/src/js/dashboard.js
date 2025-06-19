@@ -49,7 +49,7 @@ function loadTrips() {
         <div class="card h-100 trip-card">
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-start mb-2">
-              <h5 class="card-title mb-0">${trip.name}</h5>
+              <h2 class="card-title mb-0">${trip.name}</h2>
               <span class="badge bg-${getTripStatusClass(trip.status)}">
                 ${trip.status}
               </span>

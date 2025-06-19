@@ -14,7 +14,7 @@ h1,
 h2,
 h3,
 h4,
-h5,
+h2,
 h6 {
   font-family: "Poppins", sans-serif;
   font-weight: 600;
@@ -69,5 +69,3 @@ h6 {
 .alert strong {
   font-weight: 600;
 }
-
-
