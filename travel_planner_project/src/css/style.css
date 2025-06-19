@@ -1017,12 +1017,10 @@ form a {
   transform: scale(1.2);
 }
 
-/* Banner */
 .banner {
   animation: fadeIn 1.5s ease-in-out;
 }
 
-/* Traveller Stories */
 .traveller-stories .card {
   transition: transform 0.3s ease;
 }
@@ -1039,7 +1037,6 @@ form a {
   transform: scale(1.2);
 }
 
-/* Travel Inspiration */
 .travel-card {
   transition: transform 0.3s ease;
 }
@@ -1057,7 +1054,6 @@ form a {
   color: white;
 }
 
-/* How It Works */
 #how-it-works .feature-card {
   transition: transform 0.3s ease;
 }
@@ -1075,7 +1071,6 @@ form a {
   transform: rotate(360deg);
 }
 
-/* Newsletter */
 .newsletter-form input[type="email"] {
   transition: all 0.3s ease;
 }
@@ -1085,7 +1080,6 @@ form a {
   box-shadow: 0 0 8px rgba(79, 195, 247, 0.5);
 }
 
-/* Footer */
 .footer-nav a {
   transition: all 0.3s ease;
   display: inline-block;
@@ -1104,7 +1098,6 @@ form a {
   color: var(--primary-color);
 }
 
-/* Button Animations */
 .btn {
   transition: all 0.3s ease;
   position: relative;
@@ -1140,7 +1133,6 @@ form a {
   left: 100%;
 }
 
-
 @media (max-width: 768px) {
   .destinations .card,
   .feature-card,
@@ -1160,7 +1152,6 @@ form a {
     width: fit-content;
   }
 }
-
 
 @media (min-width: 769px) and (max-width: 1024px) {
   .destinations {

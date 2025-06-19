@@ -17,7 +17,6 @@
   padding: 01.2rem 0;
 }
 
-
 .navbar-brand i {
   margin-right: var(--space-xs);
   color: var(--color-primary);
@@ -885,4 +884,242 @@ canvas {
   align-items: center;
   padding: 10px;
   border-bottom: 1px solid #eee;
+}
+
+@media (max-width: 767px) {
+  .container {
+    padding: 0 15px;
+  }
+
+  .navbar-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .navbar-nav {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .dropdown {
+    width: 100%;
+  }
+
+  .dropdown-toggle {
+    width: 100%;
+    text-align: left;
+    padding: 0.75rem 1rem;
+  }
+
+  .dropdown-menu {
+    width: 100%;
+    position: static;
+    margin-top: 0.5rem;
+  }
+
+  .trip-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .trip-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .tab-nav {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    border-bottom: none;
+  }
+
+  .tab-item {
+    margin-right: 0;
+    flex: 1 0 auto;
+  }
+
+  .tab-link {
+    padding: 0.75rem;
+    font-size: 0.8rem;
+    justify-content: center;
+    border-bottom: none;
+    border-radius: 4px;
+    background: #f8f9fa;
+  }
+
+  .tab-link.active {
+    border-bottom: none;
+    background: #e9ecef;
+  }
+
+  .row {
+    flex-direction: column;
+    margin: 0;
+  }
+
+  .col-md-6,
+  .col-md-4 {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding: 0;
+  }
+
+  .card {
+    margin-bottom: 1.5rem;
+  }
+
+  .search-input-group {
+    flex-direction: column;
+  }
+
+  .search-button {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  .budget-summary {
+    margin-bottom: 1.5rem;
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .accordion-button {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .modal-dialog {
+    width: 95%;
+    margin: 0.5rem auto;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .container {
+    padding: 0 20px;
+  }
+
+  .col-md-6 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .tab-link {
+    padding: 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .navbar-nav {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 575px) {
+  .trip-info h1 {
+    font-size: 1.5rem;
+  }
+
+  .trip-dates {
+    font-size: 0.9rem;
+  }
+
+  .btn {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  .form-control,
+  .form-select {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .card-title {
+    font-size: 1.1rem;
+  }
+
+  #budgetChart {
+    height: 180px !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .input-group {
+    flex-direction: column;
+  }
+
+  .input-group-text {
+    border-radius: 4px 4px 0 0;
+    border-right: 1px solid #ced4da;
+    border-bottom: none;
+  }
+
+  .input-group .form-control {
+    border-radius: 0 0 4px 4px;
+    border-left: 1px solid #ced4da;
+  }
+}
+
+@media (max-width: 767px) {
+  input[type="date"] {
+    padding: 0.5rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .trip-actions {
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .empty-state {
+    padding: 2rem 0;
+  }
+
+  .empty-state i {
+    font-size: 3rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .list-group-item {
+    padding: 0.75rem;
+  }
+
+  .hotel-results-container {
+    margin-top: 1.5rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .modal-dialog {
+    max-height: 85vh;
+  }
+
+  .modal-body {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .tab-link i {
+    display: none;
+  }
+
+  .btn i {
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 767px) and (orientation: landscape) {
+  .modal-dialog {
+    max-height: 70vh;
+  }
 }
