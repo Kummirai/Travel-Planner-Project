@@ -209,8 +209,8 @@ function validateAirportCode(code) {
 const AMADEUS_CONFIG = {
   baseUrl: "https://test.api.amadeus.com/v2",
   authUrl: "https://test.api.amadeus.com/v1/security/oauth2/token",
-  clientId: "xxyJOp6MsTG5aVE88cXJAPrzt30B28iK",
-  clientSecret: "hMptf8cl16y64mV6",
+  clientId: "",
+  clientSecret: "",
 };
 
 let amadeusAccessToken = null;
